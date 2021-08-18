@@ -17,14 +17,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 
-data class StatsRecord(
-    val dateOfWorkout: LocalDate,
-    val exerciseName: String,
-    val sets: Int,
-    val reps: Int,
-    val weight: Int
-)
-
 class StatsFileReader(
     private val resources: Resources,
     private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -62,20 +54,20 @@ class StatsFileReader(
             return StatsRecord(
                 dateOfWorkout = convertDate(line[0]),
                 exerciseName = line[1],
-                sets = convertInt(line[2]),
-                reps = convertInt(line[3]),
-                weight = convertInt(line[4])
+                sets = convertUInt(line[2]),
+                reps = convertUInt(line[3]),
+                weight = convertUInt(line[4])
             )
         } catch (t: Throwable) {
             throw RuntimeException("Error reading data file, line $lineNum: ${t.message}")
         }
     }
 
-    private fun convertInt(s: String): Int {
+    private fun convertUInt(s: String): UInt {
         return try {
-            s.toInt()
+            s.toUInt()
         } catch (e: NumberFormatException) {
-            throw RuntimeException("Integer value expected but found '$s'")
+            throw RuntimeException("Unsigned integer value expected but found '$s'")
         }
     }
 
