@@ -1,2 +1,6 @@
 # one-rep-max
-Example app that displays one-repetition max (1 RM) info based on workout data
+Example app that displays one-repetition max (1 RM) info based on workout data.
+
+## Libraries
+1. ...
+2. ...

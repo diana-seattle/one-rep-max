@@ -1,0 +1,2 @@
+rootProject.name = "one-rep-max"
+include ':app'
