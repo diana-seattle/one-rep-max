@@ -1,11 +1,10 @@
 package org.indiv.dls.onerepmax.data
 
-import android.content.res.Resources
+import android.content.Context
 import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Assert.*
 
 import org.junit.Before
@@ -52,15 +51,13 @@ class StatsFileReaderTest {
         private const val badDateFormatLine = "Whenever 15 2021,Deadlift,1b,5,245\n"
     }
 
-    @MockK lateinit var resources: Resources
+    @MockK lateinit var context: Context
 
-    private lateinit var statsFileReader: StatsFileReader
+    @InjectMockKs private lateinit var statsFileReader: StatsFileReader
 
-    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        statsFileReader = StatsFileReader(resources, TestCoroutineDispatcher())
     }
 
     @Test

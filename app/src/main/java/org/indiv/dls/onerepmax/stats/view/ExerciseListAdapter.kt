@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import org.indiv.dls.onerepmax.databinding.ViewholderExerciseBinding
 import org.indiv.dls.onerepmax.stats.viewmodel.ExercisePresentation
+import javax.inject.Inject
 
-class ExerciseListAdapter : RecyclerView.Adapter<ExerciseViewHolder>() {
+class ExerciseListAdapter @Inject constructor() : RecyclerView.Adapter<ExerciseViewHolder>() {
 
     var items: List<ExercisePresentation> = emptyList()
 

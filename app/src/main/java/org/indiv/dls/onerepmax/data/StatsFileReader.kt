@@ -1,12 +1,12 @@
 package org.indiv.dls.onerepmax.data
 
-import android.content.res.Resources
-import kotlinx.coroutines.CoroutineDispatcher
+import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.indiv.dls.onerepmax.R
 import java.io.InputStream
 import com.opencsv.CSVReader
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.yield
 import java.io.IOException
 import java.io.InputStreamReader
@@ -15,16 +15,15 @@ import java.lang.RuntimeException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class StatsFileReader(
-    private val resources: Resources,
-    private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
-) {
+@Singleton
+class StatsFileReader @Inject constructor(@ApplicationContext private val context: Context) {
 
     suspend fun readFile(): List<StatsRecord> {
-        return withContext(ioCoroutineDispatcher) {
-            val inputStream = resources.openRawResource(R.raw.workout_data)
+        return withContext(Dispatchers.IO) {
+            val inputStream = context.resources.openRawResource(R.raw.workout_data)
             readInputStream(inputStream)
         }
     }

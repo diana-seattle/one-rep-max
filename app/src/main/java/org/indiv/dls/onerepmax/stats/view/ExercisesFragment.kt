@@ -5,17 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseBinding
-import org.indiv.dls.onerepmax.stats.viewmodel.ExercisePresentation
+import org.indiv.dls.onerepmax.stats.viewmodel.ExercisesViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ExercisesFragment : Fragment() {
+
+    @Inject lateinit var exerciseListAdapter: ExerciseListAdapter
+
+    private val exercisesViewModel: ExercisesViewModel by activityViewModels()
 
     private var _binding: FragmentExerciseBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        exercisesViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
+            exerciseListAdapter.items = it
+        }
+        exercisesViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+        }
+
         _binding = FragmentExerciseBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -23,13 +39,7 @@ class ExercisesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ExerciseListAdapter()
-        adapter.items = listOf(
-            ExercisePresentation("Ex1", "155"),
-            ExercisePresentation("Ex2", "111"),
-        )
-
-        binding.exerciseList.adapter = adapter
+        binding.exerciseList.adapter = exerciseListAdapter
     }
 
     override fun onDestroyView() {

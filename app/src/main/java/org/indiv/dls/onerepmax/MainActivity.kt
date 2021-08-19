@@ -1,7 +1,6 @@
 package org.indiv.dls.onerepmax
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -9,15 +8,24 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.databinding.ActivityMainBinding
+import org.indiv.dls.onerepmax.stats.viewmodel.ExercisesViewModel
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private val exercisesViewModel: ExercisesViewModel by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        exercisesViewModel.fetchExerciseListData()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

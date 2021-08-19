@@ -4,16 +4,19 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.roundToInt
 
-class StatsCalculator(private val computationalCoroutineDispatcher: CoroutineDispatcher = Dispatchers.Default) {
+@Singleton
+class StatsCalculator @Inject constructor() {
 
     companion object {
         private const val MAX_ALLOWED_REPS = 36u
     }
 
     suspend fun calculate(records: List<StatsRecord>): List<ExerciseWithStats> {
-        return withContext(computationalCoroutineDispatcher) {
+        return withContext(Dispatchers.Default) {
             // This function could be as simple as:
             //
             //   records.groupBy { it.exerciseName }.map {

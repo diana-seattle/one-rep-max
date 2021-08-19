@@ -4,16 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import org.indiv.dls.onerepmax.data.StatsCalculator
 import org.indiv.dls.onerepmax.data.StatsFileReader
 import java.lang.Exception
+import javax.inject.Inject
 
-class ExercisesViewModel(
-    val statsFileReader: StatsFileReader,
-    val statsCalculator: StatsCalculator,
-    val presentationHelper: PresentationHelper
+@HiltViewModel
+class ExercisesViewModel @Inject constructor(
+    private val statsFileReader: StatsFileReader,
+    private val statsCalculator: StatsCalculator,
+    private val presentationHelper: PresentationHelper
 ) : ViewModel() {
 
     private val _exerciseListLiveData = MutableLiveData<List<ExercisePresentation>>()

@@ -1,8 +1,6 @@
 package org.indiv.dls.onerepmax.data
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Assert.*
 
 import org.junit.Before
@@ -15,16 +13,11 @@ class StatsCalculatorTest {
         private val day2 = LocalDate.of(2020, 2, 3)
     }
 
-    // See https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/
-    @ExperimentalCoroutinesApi
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
-
     private lateinit var statsCalculator: StatsCalculator
 
-    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
-        statsCalculator = StatsCalculator(testCoroutineDispatcher)
+        statsCalculator = StatsCalculator()
     }
 
     @Test
