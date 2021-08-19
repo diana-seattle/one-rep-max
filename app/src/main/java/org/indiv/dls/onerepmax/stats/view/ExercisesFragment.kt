@@ -1,4 +1,4 @@
-package org.indiv.dls.onerepmax.stats
+package org.indiv.dls.onerepmax.stats.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
