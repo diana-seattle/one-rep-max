@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import org.indiv.dls.onerepmax.databinding.ViewholderExerciseBinding
+import org.indiv.dls.onerepmax.stats.viewmodel.ExercisePresentation
 
 class ExerciseListAdapter : RecyclerView.Adapter<ExerciseViewHolder>() {
 
@@ -18,7 +19,7 @@ class ExerciseListAdapter : RecyclerView.Adapter<ExerciseViewHolder>() {
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
         with(items[position]) {
             holder.binding.exerciseName.text = name
-            holder.binding.onerepmaxPersonalRecord.text = oneRepMaxRecord
+            holder.binding.onerepmaxPersonalRecord.text = personalRecord
             holder.binding.root.setOnClickListener {
                 //todo
                 Snackbar.make(it, "open fragment for: $name", Snackbar.LENGTH_LONG).show()

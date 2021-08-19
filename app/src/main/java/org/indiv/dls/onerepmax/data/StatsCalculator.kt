@@ -21,7 +21,7 @@ class StatsCalculator(private val computationalCoroutineDispatcher: CoroutineDis
             //   }
             //
             // except that we need to make it cancellable with the call to isActive(). For some reason using
-            // yield() causes the tests to hang, which I'll investigate if I have more time.
+            // yield() causes the tests to hang, which I'll investigate if I have more time (todo).
 
             val groupedByExercise = records.groupBy { it.exerciseName }
 

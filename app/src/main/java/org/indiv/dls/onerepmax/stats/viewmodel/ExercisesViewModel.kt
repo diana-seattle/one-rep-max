@@ -16,11 +16,11 @@ class ExercisesViewModel(
     val presentationHelper: PresentationHelper
 ) : ViewModel() {
 
-    private val _exerciseListLiveData = MutableLiveData<List<Exercise>>()
-    val exerciseListLiveData: LiveData<List<Exercise>> = _exerciseListLiveData
+    private val _exerciseListLiveData = MutableLiveData<List<ExercisePresentation>>()
+    val exerciseListLiveData: LiveData<List<ExercisePresentation>> = _exerciseListLiveData
 
-    private val _exerciseDetailLiveData = MutableLiveData<ExerciseDetail>()
-    val exerciseDetailLiveData: LiveData<ExerciseDetail> = _exerciseDetailLiveData
+    private val _exerciseDetailLiveData = MutableLiveData<ExerciseDetailPresentation>()
+    val exerciseDetailLiveData: LiveData<ExerciseDetailPresentation> = _exerciseDetailLiveData
 
     private val _errorResultLiveData = MutableLiveData<String>()
     val errorResultLiveData: LiveData<String> = _errorResultLiveData

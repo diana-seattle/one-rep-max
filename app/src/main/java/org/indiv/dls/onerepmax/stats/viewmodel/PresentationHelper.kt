@@ -4,13 +4,13 @@ import org.indiv.dls.onerepmax.data.ExerciseWithStats
 
 class PresentationHelper {
 
-    fun getExercises(exerciseData: List<ExerciseWithStats>): List<Exercise> {
-        return exerciseData.map { Exercise(it.exerciseName, it.oneRepMaxPersonalRecord.toString()) }
+    fun getExercises(exerciseData: List<ExerciseWithStats>): List<ExercisePresentation> {
+        return exerciseData.map { ExercisePresentation(it.exerciseName, it.oneRepMaxPersonalRecord.toString()) }
     }
 
-    fun getExerciseDetail(exerciseWithStats: ExerciseWithStats): ExerciseDetail {
-        return ExerciseDetail(
-            exercise = Exercise(exerciseWithStats.exerciseName, exerciseWithStats.oneRepMaxPersonalRecord.toString()),
+    fun getExerciseDetail(exerciseWithStats: ExerciseWithStats): ExerciseDetailPresentation {
+        return ExerciseDetailPresentation(
+            exercise = ExercisePresentation(exerciseWithStats.exerciseName, exerciseWithStats.oneRepMaxPersonalRecord.toString()),
             dataPoints = exerciseWithStats.singleDayResults.map {
                 DataPoint(date = it.date, oneRepMax = it.oneRepMax)
             }

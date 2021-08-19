@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseBinding
+import org.indiv.dls.onerepmax.stats.viewmodel.ExercisePresentation
 
 class ExercisesFragment : Fragment() {
 
