@@ -52,7 +52,7 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
-    fun emitSingleExerciseData(name: String) {
+    fun selectSingleExerciseData(name: String) {
         // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that they will
         // switch themselves to the appropriate thread.
         viewModelScope.launch {

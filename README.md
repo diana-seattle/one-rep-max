@@ -6,7 +6,9 @@ Example app that displays one-repetition max (1 RM) info based on workout data.
 2. ...
 
 ## Technologies
-* Architecture Components (ViewModel and LiveData)
-* Hilt (dependency injection)
+* MVVM with Architecture Components (ViewModel and LiveData)
+* Hilt for dependency injection
 * Jetpack Navigation
 * Kotlin coroutines
+* Unit tests
+* Themes/styles

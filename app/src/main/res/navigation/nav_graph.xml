@@ -22,5 +22,18 @@
         android:label="@string/exercise_fragment_label"
         tools:layout="@layout/fragment_exercise">
 
+        <action
+            android:id="@+id/action_ExerciseFragment_to_ExerciseDetailFragment"
+            app:destination="@id/ExerciseDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ExerciseDetailFragment"
+        android:name="org.indiv.dls.onerepmax.stats.view.ExerciseDetailFragment"
+        android:label="{exerciseName}"
+        tools:layout="@layout/fragment_exercise_detail">
+        <argument
+            android:name="@string/key_exercise_name"
+            app:argType="string" />
     </fragment>
 </navigation>

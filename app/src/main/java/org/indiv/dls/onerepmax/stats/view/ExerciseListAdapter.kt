@@ -11,6 +11,7 @@ import javax.inject.Inject
 class ExerciseListAdapter @Inject constructor() : RecyclerView.Adapter<ExerciseViewHolder>() {
 
     var items: List<ExercisePresentation> = emptyList()
+    var itemClickListener: ((String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
         val binding = ViewholderExerciseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,8 +23,7 @@ class ExerciseListAdapter @Inject constructor() : RecyclerView.Adapter<ExerciseV
             holder.binding.exerciseName.text = name
             holder.binding.onerepmaxPersonalRecord.text = personalRecord
             holder.binding.root.setOnClickListener {
-                //todo
-                Snackbar.make(it, "open fragment for: $name", Snackbar.LENGTH_LONG).show()
+                itemClickListener?.invoke(items[position].name)
             }
         }
     }
