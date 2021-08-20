@@ -1,5 +1,7 @@
 package org.indiv.dls.onerepmax.stats.viewmodel
 
+import android.graphics.Color
+import io.mockk.mockkStatic
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import org.indiv.dls.onerepmax.data.SingleDayResult
 import org.junit.Assert.*
@@ -33,21 +35,23 @@ class PresentationHelperTest {
 
         val result = presentationHelper.getExerciseDetail(input)
 
-        assertEquals(input.exerciseName, result.exercise.name)
-        assertEquals(input.oneRepMaxPersonalRecord.toString(), result.exercise.personalRecord)
+        assertEquals(input.exerciseName, result.exerciseSummary.name)
+        assertEquals(input.oneRepMaxPersonalRecord.toString(), result.exerciseSummary.personalRecord)
         assertEquals(input.singleDayResults.size, result.dataPoints.size)
         result.dataPoints.forEachIndexed { i, dataPoint ->
-            assertEquals(input.singleDayResults[i].date, dataPoint.date)
-            assertEquals(input.singleDayResults[i].oneRepMax, dataPoint.oneRepMax)
+            assertEquals(i.toFloat(), dataPoint.xAxisValue)
+            assertEquals(input.singleDayResults[i].oneRepMax.toFloat(), dataPoint.yAxisValue)
         }
+        assertEquals("May 12 2020", result.dataPoints[0].xAxisLabel)
+        assertEquals("Dec 14 2020", result.dataPoints[1].xAxisLabel)
     }
 
     private fun createExerciseWithStats(
         exerciseName: String = "exercise1",
         oneRepMaxPersonalRecord: UInt = 15u,
         singleDayResults: List<SingleDayResult> = listOf(
-            SingleDayResult(LocalDate.now(), 5u),
-            SingleDayResult(LocalDate.now(), 15u)
+            SingleDayResult(LocalDate.of(2020, 5, 12), 5u),
+            SingleDayResult(LocalDate.of(2020, 12, 14), 15u)
         )
     ): ExerciseWithStats {
         return ExerciseWithStats(
