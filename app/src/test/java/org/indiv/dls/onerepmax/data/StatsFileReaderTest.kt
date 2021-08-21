@@ -90,7 +90,7 @@ class StatsFileReaderTest {
     fun readInputStream_incompleteLine(): Unit = runBlocking {
         assertThrowsOnRead(
             inputStream = createInputStream(line1 + incompleteLine + line3),
-            expectedMessage = "Error reading data file, line 2: Wrong number of fields"
+            expectedMessage = "Error in file, line 2: Wrong number of fields"
         )
     }
 
@@ -98,7 +98,7 @@ class StatsFileReaderTest {
     fun readInputStream_badDateFormat(): Unit = runBlocking {
         assertThrowsOnRead(
             inputStream = createInputStream(line1 + line2 + line3 + badDateFormatLine),
-            expectedMessage = "Error reading data file, line 4: Date value expected but found 'Whenever 15 2021'"
+            expectedMessage = "Error in file, line 4: Date value expected but found 'Whenever 15 2021'"
         )
     }
 
@@ -106,7 +106,7 @@ class StatsFileReaderTest {
     fun readInputStream_badIntFormat(): Unit = runBlocking {
         assertThrowsOnRead(
             inputStream = createInputStream(badIntFormatLine + line2 + line3),
-            expectedMessage = "Error reading data file, line 1: Unsigned integer value expected but found '1b'"
+            expectedMessage = "Error in file, line 1: Positive integer value expected but found '1b'"
         )
     }
 
@@ -114,7 +114,7 @@ class StatsFileReaderTest {
     fun readInputStream_negativeIntFormat(): Unit = runBlocking {
         assertThrowsOnRead(
             inputStream = createInputStream(line1 + negativeIntFormatLine + line3),
-            expectedMessage = "Error reading data file, line 2: Unsigned integer value expected but found '-5'"
+            expectedMessage = "Error in file, line 2: Positive integer value expected but found '-5'"
         )
     }
 

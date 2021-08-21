@@ -37,7 +37,10 @@ class MainActivity : AppCompatActivity() {
 
         exercisesViewModel.fetchExerciseListData()
         exercisesViewModel.errorResultLiveData.observe(this) {
-            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE).apply {
+                setAction(getString(R.string.button_text_ok)) { dismiss() }
+                show()
+            }
         }
     }
 

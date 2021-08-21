@@ -12,4 +12,5 @@
     <string name="lbs_label">lbs</string>
     <string name="key_exercise_name">exerciseName</string>
     <string name="yaxis_label">%1$d lbs</string>
+    <string name="button_text_ok">OK</string>
 </resources>

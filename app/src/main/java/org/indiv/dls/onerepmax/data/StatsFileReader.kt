@@ -58,7 +58,7 @@ class StatsFileReader @Inject constructor(@ApplicationContext private val contex
                 weight = convertUInt(line[4])
             )
         } catch (t: Throwable) {
-            throw RuntimeException("Error reading data file, line $lineNum: ${t.message}")
+            throw RuntimeException("Error in file, line $lineNum: ${t.message}")
         }
     }
 
@@ -66,7 +66,7 @@ class StatsFileReader @Inject constructor(@ApplicationContext private val contex
         return try {
             s.toUInt()
         } catch (e: NumberFormatException) {
-            throw RuntimeException("Unsigned integer value expected but found '$s'")
+            throw RuntimeException("Positive integer value expected but found '$s'")
         }
     }
 
