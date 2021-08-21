@@ -12,7 +12,6 @@ import org.junit.Test
 import java.io.InputStream
 import java.io.ByteArrayInputStream
 import java.lang.Exception
-import java.lang.RuntimeException
 import java.time.LocalDate
 
 
@@ -87,49 +86,46 @@ class StatsFileReaderTest {
         assertEquals(record3, results[2])
     }
 
-    // TODO: migrate to junit 5 which makes testing for exceptions easier
-    @Test(expected = RuntimeException::class)
+    @Test
     fun readInputStream_incompleteLine(): Unit = runBlocking {
-        val inputStream = createInputStream(line1 + incompleteLine + line3)
-        try {
-            statsFileReader.readInputStream(inputStream)
-        } catch (e: Exception) {
-            assertEquals("Error reading data file, line 2: Wrong number of fields", e.message)
-            throw e
-        }
+        assertThrowsOnRead(
+            inputStream = createInputStream(line1 + incompleteLine + line3),
+            expectedMessage = "Error reading data file, line 2: Wrong number of fields"
+        )
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun readInputStream_badDateFormat(): Unit = runBlocking {
-        val inputStream = createInputStream(line1 + line2 + line3 + badDateFormatLine)
-        try {
-            statsFileReader.readInputStream(inputStream)
-        } catch (e: Exception) {
-            assertEquals("Error reading data file, line 4: Date value expected but found 'Whenever 15 2021'", e.message)
-            throw e
-        }
+        assertThrowsOnRead(
+            inputStream = createInputStream(line1 + line2 + line3 + badDateFormatLine),
+            expectedMessage = "Error reading data file, line 4: Date value expected but found 'Whenever 15 2021'"
+        )
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun readInputStream_badIntFormat(): Unit = runBlocking {
-        val inputStream = createInputStream(badIntFormatLine + line2 + line3)
-        try {
-            statsFileReader.readInputStream(inputStream)
-        } catch (e: Exception) {
-            assertEquals("Error reading data file, line 1: Unsigned integer value expected but found '1b'", e.message)
-            throw e
-        }
+        assertThrowsOnRead(
+            inputStream = createInputStream(badIntFormatLine + line2 + line3),
+            expectedMessage = "Error reading data file, line 1: Unsigned integer value expected but found '1b'"
+        )
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun readInputStream_negativeIntFormat(): Unit = runBlocking {
-        val inputStream = createInputStream(line1 + negativeIntFormatLine + line3)
-        try {
+        assertThrowsOnRead(
+            inputStream = createInputStream(line1 + negativeIntFormatLine + line3),
+            expectedMessage = "Error reading data file, line 2: Unsigned integer value expected but found '-5'"
+        )
+    }
+
+    private suspend fun assertThrowsOnRead(inputStream: InputStream, expectedMessage: String) {
+        val exception = try {
             statsFileReader.readInputStream(inputStream)
+            null
         } catch (e: Exception) {
-            assertEquals("Error reading data file, line 2: Unsigned integer value expected but found '-5'", e.message)
-            throw e
+            e
         }
+        assertEquals(expectedMessage, exception?.message)
     }
 
     private fun createInputStream(s: String): InputStream {

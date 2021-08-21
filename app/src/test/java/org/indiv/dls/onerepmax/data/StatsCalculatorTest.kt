@@ -11,6 +11,7 @@ class StatsCalculatorTest {
     companion object {
         private val day1 = LocalDate.of(2020, 1, 2)
         private val day2 = LocalDate.of(2020, 2, 3)
+        private val day3 = LocalDate.of(2020, 3, 4)
     }
 
     private lateinit var statsCalculator: StatsCalculator
@@ -43,7 +44,7 @@ class StatsCalculatorTest {
     }
 
     @Test
-    fun calculate_multipleExercises() = runBlocking {
+    fun calculate_multipleExercises_oneDay() = runBlocking {
         val records = listOf(
             createStatsRecord().copy(exerciseName = "e1", reps = 4u, weight = 40u),
             createStatsRecord().copy(exerciseName = "e2", reps = 8u, weight = 20u),
@@ -65,6 +66,26 @@ class StatsCalculatorTest {
         assertEquals(44u, exercise1Result.singleDayResults[0].oneRepMax)
         assertEquals(25u, exercise2Result.singleDayResults[0].oneRepMax)
         assertEquals(28u, exercise3Result.singleDayResults[0].oneRepMax)
+    }
+
+    @Test
+    fun calculate_avoidingDivideByZero() = runBlocking {
+        val records = listOf(
+            createStatsRecord().copy(dateOfWorkout = day1, reps = 36u, weight = 1u),
+            createStatsRecord().copy(dateOfWorkout = day2, reps = 37u, weight = 1u),
+            createStatsRecord().copy(dateOfWorkout = day3, reps = 100u, weight = 1u)
+        )
+
+        val results = statsCalculator.calculate(records)
+
+        assertEquals(1, results.size) // one exercise
+        val exerciseResult = results[0]
+        assertEquals(3, exerciseResult.singleDayResults.size) // 3 days
+
+        assertEquals(36u, exerciseResult.oneRepMaxPersonalRecord)
+        exerciseResult.singleDayResults.forEach {
+            assertEquals(36u, it.oneRepMax)
+        }
     }
 
     private fun createStatsRecord(

@@ -1,7 +1,5 @@
 package org.indiv.dls.onerepmax.stats.viewmodel
 
-import android.graphics.Color
-import io.mockk.mockkStatic
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import org.indiv.dls.onerepmax.data.SingleDayResult
 import org.junit.Assert.*
