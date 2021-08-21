@@ -1,6 +1,10 @@
 # one-rep-max
 Example app that displays one-repetition max (1 RM) info based on workout data.
 
+## Features
+1. Dark mode menu item for earlier Android versions (< API29) that do not support dark mode in system settings 
+2. Portrait and landscape modes
+
 ## Libraries
 1. opencsv: http://opencsv.sourceforge.net
 2. MPAndroidChart: https://github.com/PhilJay/MPAndroidChart
