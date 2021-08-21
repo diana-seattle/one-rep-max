@@ -22,6 +22,12 @@ class StatsCalculatorTest {
     }
 
     @Test
+    fun calculate_empty() = runBlocking {
+        val results = statsCalculator.calculate(emptyList())
+        assertTrue(results.isEmpty())
+    }
+
+    @Test
     fun calculate_oneExercise_multipleDays() = runBlocking {
         val records = listOf(
             createStatsRecord().copy(dateOfWorkout = day1, sets = 1u, reps = 4u, weight = 40u),

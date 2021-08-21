@@ -52,6 +52,7 @@ class ExerciseDetailFragment : Fragment() {
             configureChart(presentation.dataPoints, lineDataSet)
             binding.chart.invalidate() // refresh
         }
+
         exercisesViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
         }

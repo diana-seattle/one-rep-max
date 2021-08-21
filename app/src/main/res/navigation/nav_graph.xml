@@ -3,18 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/HomeFragment">
-
-    <fragment
-        android:id="@+id/HomeFragment"
-        android:name="org.indiv.dls.onerepmax.home.HomeFragment"
-        android:label="@string/intro_fragment_label"
-        tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_HomeFragment_to_ExerciseFragment"
-            app:destination="@id/ExerciseFragment" />
-    </fragment>
+    app:startDestination="@id/ExerciseFragment">
 
     <fragment
         android:id="@+id/ExerciseFragment"

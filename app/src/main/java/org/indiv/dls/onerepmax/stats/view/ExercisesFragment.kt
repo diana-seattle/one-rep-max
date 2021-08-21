@@ -40,10 +40,12 @@ class ExercisesFragment : Fragment() {
             findNavController().navigate(R.id.action_ExerciseFragment_to_ExerciseDetailFragment, args)
         }
 
-        binding.exerciseList.adapter = exerciseListAdapter
+        binding.exerciseRecyclerView.adapter = exerciseListAdapter
         exercisesViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
             exerciseListAdapter.items = it
+            exerciseListAdapter.notifyDataSetChanged()
         }
+
         exercisesViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
         }
