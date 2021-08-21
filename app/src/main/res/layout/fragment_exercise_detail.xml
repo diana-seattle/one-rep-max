@@ -11,7 +11,7 @@
         layout="@layout/viewholder_exercise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/half_margin"
+        android:layout_marginBottom="@dimen/quarter_margin"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.github.mikephil.charting.charts.LineChart
