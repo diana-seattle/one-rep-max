@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/ExerciseFragment"
-        android:name="org.indiv.dls.onerepmax.stats.view.ExercisesFragment"
+        android:name="org.indiv.dls.onerepmax.stats.view.ExerciseListFragment"
         android:label="@string/exercise_fragment_label"
-        tools:layout="@layout/fragment_exercise">
+        tools:layout="@layout/fragment_exercise_list">
 
         <action
-            android:id="@+id/action_ExerciseFragment_to_ExerciseDetailFragment"
+            android:id="@+id/action_ExerciseListFragment_to_ExerciseDetailFragment"
             app:destination="@id/ExerciseDetailFragment" />
     </fragment>
 
