@@ -10,5 +10,5 @@ Example app that displays one-repetition max (1 RM) info based on workout data.
 * Hilt for dependency injection
 * Jetpack Navigation
 * Kotlin coroutines
-* Unit tests
+* Unit tests with MockK
 * Themes/styles
