@@ -40,8 +40,8 @@ class PresentationHelperTest {
             assertEquals(i.toFloat(), dataPoint.xAxisValue)
             assertEquals(input.singleDayResults[i].oneRepMax.toFloat(), dataPoint.yAxisValue)
         }
-        assertEquals("May 12 2020", result.dataPoints[0].xAxisLabel)
-        assertEquals("Dec 14 2020", result.dataPoints[1].xAxisLabel)
+        assertEquals("May 12", result.dataPoints[0].xAxisLabel)
+        assertEquals("Dec 14", result.dataPoints[1].xAxisLabel)
     }
 
     private fun createExerciseWithStats(

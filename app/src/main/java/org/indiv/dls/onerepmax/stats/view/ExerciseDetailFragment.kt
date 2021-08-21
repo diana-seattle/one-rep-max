@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.AttrRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.github.mikephil.charting.data.LineData
@@ -58,32 +59,44 @@ class ExerciseDetailFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun configureChart(
         dataPoints: List<DataPoint>,
         lineDataSet: LineDataSet
     ) {
+        val textColor = getThemeColor(android.R.attr.textColor)
+
         with(binding.chart) {
             axisRight.isEnabled = false
             getLegend().isEnabled = false
             description = null
-            xAxis.labelRotationAngle = 45f
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.valueFormatter = object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    return dataPoints[value.toInt()].xAxisLabel
+            with(xAxis) {
+                setTextColor(textColor)
+                position = XAxis.XAxisPosition.BOTTOM
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return dataPoints[value.toInt()].xAxisLabel
+                    }
                 }
             }
+
             axisLeft.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     return resources.getString(R.string.yaxis_label, value.roundToInt())
                 }
             }
+            axisLeft.textColor = textColor
+
             data = LineData(lineDataSet)
         }
     }
 
     private fun createLineDataSet(entries: List<Entry>): LineDataSet {
-        val lineColor = MaterialColors.getColor(binding.root, R.attr.colorPrimary)
+        val lineColor = getThemeColor(R.attr.colorPrimary)
         return LineDataSet(entries, "").apply {
             setDrawValues(false)
             setDrawCircleHole(false)
@@ -92,10 +105,7 @@ class ExerciseDetailFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun getThemeColor(@AttrRes colorAttributeResId: Int): Int {
+        return MaterialColors.getColor(binding.root, colorAttributeResId)
     }
-
-
 }

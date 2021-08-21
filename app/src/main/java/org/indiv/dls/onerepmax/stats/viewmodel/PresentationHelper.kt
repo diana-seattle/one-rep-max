@@ -1,7 +1,5 @@
 package org.indiv.dls.onerepmax.stats.viewmodel
 
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineDataSet
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -20,11 +18,9 @@ class PresentationHelper @Inject constructor() {
 
     fun getExerciseDetail(exerciseWithStats: ExerciseWithStats): ExerciseDetailPresentation {
         val sortedResults = exerciseWithStats.singleDayResults.sortedBy { it.date }
-        val currentYear = LocalDate.now().year
-
         val dataPoints = sortedResults.mapIndexed { index, result ->
             DataPoint(
-                xAxisLabel = formatDateLabel(result.date, currentYear),
+                xAxisLabel = formatDateLabel(result.date),
                 xAxisValue = index.toFloat(),
                 yAxisValue = result.oneRepMax.toFloat()
             )
@@ -39,9 +35,7 @@ class PresentationHelper @Inject constructor() {
         )
     }
 
-    private fun formatDateLabel(date: LocalDate, currentYear: Int): String {
-        // Only include the year if a past year. User will assume year-less dates are the current year.
-        val yearSuffix = if (date.year == currentYear) "" else " ${date.year}"
-        return monthDayFormatter.format(date) + yearSuffix
+    private fun formatDateLabel(date: LocalDate): String {
+        return monthDayFormatter.format(date)
     }
 }
