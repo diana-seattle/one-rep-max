@@ -1,6 +1,5 @@
 package org.indiv.dls.onerepmax.viewmodel
 
-import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -22,7 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class MainActivityViewModelTest {
+class ExerciseListViewModelTest {
 
     companion object {
         private const val exerciseName = "Bench Press"
@@ -46,11 +45,10 @@ class MainActivityViewModelTest {
     @ExperimentalCoroutinesApi
     private val testCoroutineDispatcher = TestCoroutineDispatcher()
 
-    @MockK lateinit var context: Context
     @MockK lateinit var exerciseRepository: ExerciseRepository
     @MockK lateinit var presentationHelper: PresentationHelper
 
-    @InjectMockKs lateinit var mainActivityViewModel: MainActivityViewModel
+    @InjectMockKs lateinit var exerciseListViewModel: ExerciseListViewModel
 
     private var observedExercisePresentations: List<ExercisePresentation>? = null
 
@@ -63,7 +61,7 @@ class MainActivityViewModelTest {
         coEvery { exerciseRepository.getExerciseSummaries() } returns exerciseSummaries
         every { presentationHelper.getExercises(exerciseSummaries) } returns exercisePresentations
 
-        mainActivityViewModel.exerciseListLiveData.observeForever { observedExercisePresentations = it }
+        exerciseListViewModel.exerciseListLiveData.observeForever { observedExercisePresentations = it }
     }
 
     @ExperimentalCoroutinesApi
@@ -75,7 +73,7 @@ class MainActivityViewModelTest {
 
     @Test
     fun fetchExerciseListData() = runBlocking {
-        mainActivityViewModel.fetchExerciseListData()
+        exerciseListViewModel.fetchExerciseListData()
         assertEquals(exercisePresentations, observedExercisePresentations)
     }
 }

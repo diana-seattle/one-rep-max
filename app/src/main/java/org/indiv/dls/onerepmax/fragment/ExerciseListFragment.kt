@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseListBinding
-import org.indiv.dls.onerepmax.viewmodel.MainActivityViewModel
+import org.indiv.dls.onerepmax.viewmodel.ExerciseListViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -19,7 +19,7 @@ class ExerciseListFragment : Fragment() {
 
     @Inject lateinit var exerciseListAdapter: ExerciseListAdapter
 
-    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private val exerciseListViewModel: ExerciseListViewModel by activityViewModels()
 
     private var _binding: FragmentExerciseListBinding? = null
 
@@ -35,7 +35,7 @@ class ExerciseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerViewAdapter()
         setupErrorHandling()
-        mainActivityViewModel.fetchExerciseListData()
+        exerciseListViewModel.fetchExerciseListData()
     }
 
     override fun onDestroyView() {
@@ -45,7 +45,7 @@ class ExerciseListFragment : Fragment() {
 
     private fun setupRecyclerViewAdapter() {
         binding.exerciseRecyclerView.adapter = exerciseListAdapter
-        mainActivityViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
+        exerciseListViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
             exerciseListAdapter.items = it
             exerciseListAdapter.notifyDataSetChanged()
         }
@@ -60,7 +60,7 @@ class ExerciseListFragment : Fragment() {
     }
 
     private fun setupErrorHandling() {
-        mainActivityViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
+        exerciseListViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE).apply {
                 setAction(getString(R.string.button_text_ok)) { dismiss() }
                 show()
