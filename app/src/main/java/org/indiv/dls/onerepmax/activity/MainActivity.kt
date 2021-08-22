@@ -13,12 +13,12 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.ActivityMainBinding
-import org.indiv.dls.onerepmax.viewmodel.ExercisesViewModel
+import org.indiv.dls.onerepmax.viewmodel.MainActivityViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val exercisesViewModel: ExercisesViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        exercisesViewModel.fetchExerciseListData()
-        exercisesViewModel.errorResultLiveData.observe(this) {
+        mainActivityViewModel.fetchExerciseListData()
+        mainActivityViewModel.errorResultLiveData.observe(this) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE).apply {
                 setAction(getString(R.string.button_text_ok)) { dismiss() }
                 show()
@@ -45,10 +45,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (exercisesViewModel.includeDarkModeMenuItem()) {
+        if (mainActivityViewModel.includeDarkModeMenuItem()) {
             menuInflater.inflate(R.menu.menu_main, menu)
-            val isDarkModeInSettings = exercisesViewModel.isDarkModeInSettings()
-            exercisesViewModel.setDarkMode(isDarkModeInSettings)
+            val isDarkModeInSettings = mainActivityViewModel.isDarkModeInSettings()
+            mainActivityViewModel.setDarkMode(isDarkModeInSettings)
             setDarkModeMenuText(menu.getItem(0), isDarkModeInSettings)
             return true
         }
@@ -58,9 +58,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_dark_mode_toggle -> {
-                val newStateIsDark = !exercisesViewModel.isDarkModeInSettings()
-                exercisesViewModel.setDarkMode(newStateIsDark)
-                exercisesViewModel.persistDarkMode(newStateIsDark)
+                val newStateIsDark = !mainActivityViewModel.isDarkModeInSettings()
+                mainActivityViewModel.setDarkMode(newStateIsDark)
+                mainActivityViewModel.persistDarkMode(newStateIsDark)
                 setDarkModeMenuText(item, newStateIsDark)
                 true
             }
@@ -74,6 +74,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDarkModeMenuText(item: MenuItem, currentlyDark: Boolean) {
-        item.title = exercisesViewModel.getDarkModeActionTitleForState(currentlyDark)
+        item.title = mainActivityViewModel.getDarkModeActionTitleForState(currentlyDark)
     }
 }

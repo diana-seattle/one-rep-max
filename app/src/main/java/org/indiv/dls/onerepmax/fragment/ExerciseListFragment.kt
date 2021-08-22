@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseListBinding
-import org.indiv.dls.onerepmax.viewmodel.ExercisesViewModel
+import org.indiv.dls.onerepmax.viewmodel.MainActivityViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -18,7 +18,7 @@ class ExerciseListFragment : Fragment() {
 
     @Inject lateinit var exerciseListAdapter: ExerciseListAdapter
 
-    private val exercisesViewModel: ExercisesViewModel by activityViewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private var _binding: FragmentExerciseListBinding? = null
 
@@ -34,13 +34,12 @@ class ExerciseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.exerciseRecyclerView.adapter = exerciseListAdapter
-        exercisesViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
+        mainActivityViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
             exerciseListAdapter.items = it
             exerciseListAdapter.notifyDataSetChanged()
         }
         
         exerciseListAdapter.itemClickListener = { exerciseName ->
-            exercisesViewModel.selectSingleExerciseData(exerciseName)
             val args = Bundle().apply { putString(resources.getString(R.string.key_exercise_name), exerciseName) }
             findNavController().navigate(R.id.action_ExerciseListFragment_to_ExerciseDetailFragment, args)
         }

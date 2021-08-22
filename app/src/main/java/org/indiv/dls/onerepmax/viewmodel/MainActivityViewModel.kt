@@ -16,7 +16,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class ExercisesViewModel @Inject constructor(
+class MainActivityViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val exerciseRepository: ExerciseRepository,
     private val presentationHelper: PresentationHelper
@@ -24,9 +24,6 @@ class ExercisesViewModel @Inject constructor(
 
     private val _exerciseListLiveData = MutableLiveData<List<ExercisePresentation>>()
     val exerciseListLiveData: LiveData<List<ExercisePresentation>> = _exerciseListLiveData
-
-    private val _exerciseDetailLiveData = MutableLiveData<ExerciseDetailPresentation>()
-    val exerciseDetailLiveData: LiveData<ExerciseDetailPresentation> = _exerciseDetailLiveData
 
     private val _errorResultLiveData = MutableLiveData<String>()
     val errorResultLiveData: LiveData<String> = _errorResultLiveData
@@ -36,19 +33,10 @@ class ExercisesViewModel @Inject constructor(
         // they will switch themselves to the appropriate thread.
         viewModelScope.launch {
             try {
-                _exerciseListLiveData.value = presentationHelper.getExercises(exerciseRepository.getExerciseSummaries())
+                val exerciseSummaries = exerciseRepository.getExerciseSummaries()
+                _exerciseListLiveData.value = presentationHelper.getExercises(exerciseSummaries)
             } catch (e: Exception) {
                 _errorResultLiveData.value = e.message
-            }
-        }
-    }
-
-    fun selectSingleExerciseData(name: String) {
-        // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that
-        // they will switch themselves to the appropriate thread.
-        viewModelScope.launch {
-            exerciseRepository.getSingleExerciseData(name)?.let {
-                _exerciseDetailLiveData.value = presentationHelper.getExerciseDetail(it)
             }
         }
     }

@@ -6,26 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseDetailBinding
-import org.indiv.dls.onerepmax.viewmodel.ExercisesViewModel
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.color.MaterialColors
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.viewmodel.DataPoint
+import org.indiv.dls.onerepmax.viewmodel.ExerciseDetailViewModel
 import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
 class ExerciseDetailFragment : Fragment() {
 
-    private val exercisesViewModel: ExercisesViewModel by activityViewModels()
+    private val exerciseDetailViewModel: ExerciseDetailViewModel by viewModels()
 
     private var _binding: FragmentExerciseDetailBinding? = null
 
@@ -40,7 +40,10 @@ class ExerciseDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        exercisesViewModel.exerciseDetailLiveData.observe(viewLifecycleOwner) { presentation ->
+        val exerciseNameArgKey = resources.getString(R.string.key_exercise_name)
+        exerciseDetailViewModel.fetchSingleExerciseData(arguments?.getString(exerciseNameArgKey)!!)
+
+        exerciseDetailViewModel.exerciseDetailLiveData.observe(viewLifecycleOwner) { presentation ->
             with(binding.exerciseSummary) {
                 exerciseName.text = presentation.exerciseSummary.name
                 onerepmaxPersonalRecord.text = presentation.exerciseSummary.personalRecord
@@ -51,10 +54,6 @@ class ExerciseDetailFragment : Fragment() {
 
             configureChart(presentation.dataPoints, lineDataSet)
             binding.chart.invalidate() // refresh
-        }
-
-        exercisesViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
-            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
         }
     }
 
@@ -68,30 +67,35 @@ class ExerciseDetailFragment : Fragment() {
         lineDataSet: LineDataSet
     ) {
         val textColor = getThemeColor(android.R.attr.textColor)
-
         with(binding.chart) {
             axisRight.isEnabled = false
             legend.isEnabled = false
             description = null
-            with(xAxis) {
-                setTextColor(textColor)
-                position = XAxis.XAxisPosition.BOTTOM
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return dataPoints[value.toInt()].xAxisLabel
-                    }
-                }
-            }
-
-            axisLeft.valueFormatter = object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    return resources.getString(R.string.yaxis_label, value.roundToInt())
-                }
-            }
-            axisLeft.textColor = textColor
-
+            configureXAxis(xAxis, textColor, dataPoints)
+            configureYAxis(axisLeft, textColor)
             data = LineData(lineDataSet)
         }
+    }
+
+    private fun configureXAxis(xAxis: XAxis, textColor: Int, dataPoints: List<DataPoint>) {
+        with(xAxis) {
+            setTextColor(textColor)
+            position = XAxis.XAxisPosition.BOTTOM
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return dataPoints[value.toInt()].xAxisLabel
+                }
+            }
+        }
+    }
+
+    private fun configureYAxis(yAxis: YAxis, textColor: Int) {
+        yAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return resources.getString(R.string.yaxis_label, value.roundToInt())
+            }
+        }
+        yAxis.textColor = textColor
     }
 
     private fun createLineDataSet(entries: List<Entry>): LineDataSet {
