@@ -34,8 +34,8 @@ class PresentationHelperTest {
 
         val result = presentationHelper.getExerciseDetail(input)
 
-        assertEquals(input.exerciseSummary.exerciseName, result.exerciseSummary.name)
-        assertEquals(input.exerciseSummary.oneRepMaxPersonalRecord.toString(), result.exerciseSummary.personalRecord)
+        assertEquals(input.exerciseSummary.exerciseName, result.exercise.name)
+        assertEquals(input.exerciseSummary.oneRepMaxPersonalRecord.toString(), result.exercise.personalRecord)
         assertEquals(input.singleDayResults.size, result.dataPoints.size)
         result.dataPoints.forEachIndexed { i, dataPoint ->
             assertEquals(i.toFloat(), dataPoint.xAxisValue)

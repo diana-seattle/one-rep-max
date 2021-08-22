@@ -45,8 +45,8 @@ class ExerciseDetailFragment : Fragment() {
 
         exerciseDetailViewModel.exerciseDetailLiveData.observe(viewLifecycleOwner) { presentation ->
             with(binding.exerciseSummary) {
-                exerciseName.text = presentation.exerciseSummary.name
-                onerepmaxPersonalRecord.text = presentation.exerciseSummary.personalRecord
+                exerciseName.text = presentation.exercise.name
+                onerepmaxPersonalRecord.text = presentation.exercise.personalRecord
             }
 
             val entries = presentation.dataPoints.map { Entry(it.xAxisValue, it.yAxisValue) }
