@@ -1,4 +1,4 @@
-package org.indiv.dls.onerepmax.stats.viewmodel
+package org.indiv.dls.onerepmax.viewmodel
 
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import org.indiv.dls.onerepmax.data.SingleDayResult

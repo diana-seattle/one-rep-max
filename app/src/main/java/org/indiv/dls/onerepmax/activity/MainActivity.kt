@@ -1,6 +1,5 @@
-package org.indiv.dls.onerepmax
+package org.indiv.dls.onerepmax.activity
 
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,11 +9,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.ActivityMainBinding
-import org.indiv.dls.onerepmax.stats.viewmodel.ExercisesViewModel
+import org.indiv.dls.onerepmax.viewmodel.ExercisesViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

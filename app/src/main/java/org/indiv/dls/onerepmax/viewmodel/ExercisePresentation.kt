@@ -1,4 +1,4 @@
-package org.indiv.dls.onerepmax.stats.viewmodel
+package org.indiv.dls.onerepmax.viewmodel
 
 data class ExercisePresentation(
     val name: String,

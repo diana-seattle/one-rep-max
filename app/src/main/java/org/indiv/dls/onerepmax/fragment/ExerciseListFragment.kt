@@ -1,4 +1,4 @@
-package org.indiv.dls.onerepmax.stats.view
+package org.indiv.dls.onerepmax.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseListBinding
-import org.indiv.dls.onerepmax.stats.viewmodel.ExercisesViewModel
+import org.indiv.dls.onerepmax.viewmodel.ExercisesViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint

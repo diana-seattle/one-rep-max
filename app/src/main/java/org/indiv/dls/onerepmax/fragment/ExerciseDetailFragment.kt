@@ -1,4 +1,4 @@
-package org.indiv.dls.onerepmax.stats.view
+package org.indiv.dls.onerepmax.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,14 +12,13 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseDetailBinding
-import org.indiv.dls.onerepmax.stats.viewmodel.ExercisesViewModel
+import org.indiv.dls.onerepmax.viewmodel.ExercisesViewModel
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.color.MaterialColors
 import org.indiv.dls.onerepmax.R
-import org.indiv.dls.onerepmax.stats.viewmodel.DataPoint
-import org.indiv.dls.onerepmax.stats.viewmodel.ExerciseDetailPresentation
+import org.indiv.dls.onerepmax.viewmodel.DataPoint
 import kotlin.math.roundToInt
 
 

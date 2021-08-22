@@ -1,11 +1,10 @@
-package org.indiv.dls.onerepmax.stats.view
+package org.indiv.dls.onerepmax.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import org.indiv.dls.onerepmax.databinding.ViewholderExerciseBinding
-import org.indiv.dls.onerepmax.stats.viewmodel.ExercisePresentation
+import org.indiv.dls.onerepmax.viewmodel.ExercisePresentation
 import javax.inject.Inject
 
 class ExerciseListAdapter @Inject constructor() : RecyclerView.Adapter<ExerciseViewHolder>() {

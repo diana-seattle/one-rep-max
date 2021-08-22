@@ -1,4 +1,4 @@
-package org.indiv.dls.onerepmax.stats.view
+package org.indiv.dls.onerepmax.fragment
 
 import androidx.recyclerview.widget.RecyclerView
 import org.indiv.dls.onerepmax.databinding.ViewholderExerciseBinding

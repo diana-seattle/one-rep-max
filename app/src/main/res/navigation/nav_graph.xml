@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/ExerciseFragment"
-        android:name="org.indiv.dls.onerepmax.stats.view.ExerciseListFragment"
+        android:name="org.indiv.dls.onerepmax.fragment.ExerciseListFragment"
         android:label="@string/exercise_fragment_label"
         tools:layout="@layout/fragment_exercise_list">
 
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/ExerciseDetailFragment"
-        android:name="org.indiv.dls.onerepmax.stats.view.ExerciseDetailFragment"
+        android:name="org.indiv.dls.onerepmax.fragment.ExerciseDetailFragment"
         android:label="{exerciseName}"
         tools:layout="@layout/fragment_exercise_detail">
         <argument
