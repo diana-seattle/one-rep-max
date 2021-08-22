@@ -25,7 +25,7 @@ class ExerciseDetailViewModel @Inject constructor(
         // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that
         // they will switch themselves to the appropriate thread.
         viewModelScope.launch {
-            exerciseRepository.getSingleExerciseData(name)?.let {
+            exerciseRepository.getSingleExerciseDetail(name)?.let {
                 _exerciseDetailLiveData.value = presentationHelper.getExerciseDetail(it)
             }
         }

@@ -12,23 +12,24 @@ class ExerciseRepository @Inject constructor(
     // In-memory copy of all the data.
     // TODO: Consider loading into a Room database.
     private var exerciseSummaries: List<ExerciseSummary> = emptyList()
-    private var exerciseDataMap: Map<String, ExerciseWithStats> = emptyMap()
+    private var exerciseDetailMap: Map<String, ExerciseWithStats> = emptyMap()
 
     suspend fun getExerciseSummaries(): List<ExerciseSummary> {
         loadDataIfNeeded()
         return exerciseSummaries
     }
 
-    suspend fun getSingleExerciseData(name: String): ExerciseWithStats? {
+    suspend fun getSingleExerciseDetail(name: String): ExerciseWithStats? {
         loadDataIfNeeded()
-        return exerciseDataMap[name]
+        return exerciseDetailMap[name]
     }
 
     private suspend fun loadDataIfNeeded() {
         if (exerciseSummaries.isEmpty()) {
-            val exerciseData = statsCalculator.calculate(statsFileReader.readFile())
+            val statsRecords = statsFileReader.readFile()
+            val exerciseData = statsCalculator.calculate(statsRecords)
             exerciseSummaries = exerciseData.map { it.exerciseSummary }
-            exerciseDataMap = exerciseData.map { it.exerciseSummary.exerciseName to it }.toMap()
+            exerciseDetailMap = exerciseData.map { it.exerciseSummary.exerciseName to it }.toMap()
         }
     }
 

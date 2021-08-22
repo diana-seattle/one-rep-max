@@ -63,7 +63,7 @@ class ExerciseDetailViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(testCoroutineDispatcher)
 
-        coEvery { exerciseRepository.getSingleExerciseData(exerciseName) } returns exerciseWithStats
+        coEvery { exerciseRepository.getSingleExerciseDetail(exerciseName) } returns exerciseWithStats
         every { presentationHelper.getExerciseDetail(exerciseWithStats) } returns exerciseDetailPresentation
 
         exerciseDetailViewModel.exerciseDetailLiveData.observeForever { observedExerciseDetailPresentation = it }
@@ -80,7 +80,7 @@ class ExerciseDetailViewModelTest {
     fun fetchSingleExerciseData() = runBlocking {
         exerciseDetailViewModel.fetchSingleExerciseData(exerciseName)
         assertEquals(exerciseDetailPresentation, observedExerciseDetailPresentation)
-        coVerify { exerciseRepository.getSingleExerciseData(exerciseName) }
+        coVerify { exerciseRepository.getSingleExerciseDetail(exerciseName) }
         verify { presentationHelper.getExerciseDetail(exerciseWithStats) }
     }
 }
