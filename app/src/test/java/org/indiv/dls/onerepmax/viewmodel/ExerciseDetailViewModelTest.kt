@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -78,5 +80,7 @@ class ExerciseDetailViewModelTest {
     fun fetchSingleExerciseData() = runBlocking {
         exerciseDetailViewModel.fetchSingleExerciseData(exerciseName)
         assertEquals(exerciseDetailPresentation, observedExerciseDetailPresentation)
+        coVerify { exerciseRepository.getSingleExerciseData(exerciseName) }
+        verify { presentationHelper.getExerciseDetail(exerciseWithStats) }
     }
 }

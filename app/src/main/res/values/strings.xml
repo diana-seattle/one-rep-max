@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">One Rep Max</string>
-    <string name="action_dark_mode">Dark Mode</string>
-    <string name="action_light_mode">Light Mode</string>
+    <string name="action_to_dark_mode">Dark Mode</string>
+    <string name="action_to_light_mode">Light Mode</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="intro_fragment_label">One-rep Max</string>

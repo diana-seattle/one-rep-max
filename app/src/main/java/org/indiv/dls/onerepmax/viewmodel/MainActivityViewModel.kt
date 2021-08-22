@@ -26,8 +26,8 @@ class MainActivityViewModel @Inject constructor(
         AppCompatDelegate.setDefaultNightMode(mode)
     }
 
-    fun getDarkModeActionTitleForState(dark: Boolean): String {
-        val resId = if (dark) R.string.action_light_mode else R.string.action_dark_mode
+    fun getDarkModeActionTitleForExistingState(dark: Boolean): String {
+        val resId = if (dark) R.string.action_to_light_mode else R.string.action_to_dark_mode
         return context.getString(resId)
     }
 

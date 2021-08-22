@@ -65,6 +65,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDarkModeMenuText(item: MenuItem, currentlyDark: Boolean) {
-        item.title = mainActivityViewModel.getDarkModeActionTitleForState(currentlyDark)
+        item.title = mainActivityViewModel.getDarkModeActionTitleForExistingState(currentlyDark)
     }
 }
