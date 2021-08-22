@@ -12,9 +12,11 @@ Example app that displays one-repetition max (1 RM) info based on workout data.
 2. MPAndroidChart: https://github.com/PhilJay/MPAndroidChart
 
 ## Technologies
-* MVVM with Architecture Components (ViewModel and LiveData)
+* MVVM with Architecture Components (ViewModel, LiveData, Repository pattern)
 * Hilt for dependency injection
 * Jetpack Navigation
 * Kotlin coroutines
 * Unit tests with MockK
 * Themes/styles
+* Coordinator and Constraint layouts
+* View binding (which replaces findViewById)
