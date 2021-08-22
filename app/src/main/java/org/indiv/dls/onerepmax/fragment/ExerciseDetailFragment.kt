@@ -18,7 +18,9 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.color.MaterialColors
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.viewmodel.DataPoint
+import org.indiv.dls.onerepmax.viewmodel.ExerciseDetailPresentation
 import org.indiv.dls.onerepmax.viewmodel.ExerciseDetailViewModel
+import org.indiv.dls.onerepmax.viewmodel.ExercisePresentation
 import kotlin.math.roundToInt
 
 
@@ -44,22 +46,25 @@ class ExerciseDetailFragment : Fragment() {
         exerciseDetailViewModel.fetchSingleExerciseData(arguments?.getString(exerciseNameArgKey)!!)
 
         exerciseDetailViewModel.exerciseDetailLiveData.observe(viewLifecycleOwner) { presentation ->
-            with(binding.exerciseSummary) {
-                exerciseName.text = presentation.exercise.name
-                onerepmaxPersonalRecord.text = presentation.exercise.personalRecord
-            }
-
-            val entries = presentation.dataPoints.map { Entry(it.xAxisValue, it.yAxisValue) }
-            val lineDataSet = createLineDataSet(entries)
-
-            configureChart(presentation.dataPoints, lineDataSet)
-            binding.chart.invalidate() // refresh
+            bindSummaryData(presentation.exercise)
+            configureChart(presentation.dataPoints, createLineDataSet(presentation))
+            binding.chart.invalidate() // refresh chart
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun bindSummaryData(presentation: ExercisePresentation) {
+        binding.exerciseSummary.exerciseName.text = presentation.name
+        binding.exerciseSummary.onerepmaxPersonalRecord.text = presentation.personalRecord
+    }
+
+    private fun createLineDataSet(presentation: ExerciseDetailPresentation): LineDataSet {
+        val entries = presentation.dataPoints.map { Entry(it.xAxisValue, it.yAxisValue) }
+        return createLineDataSet(entries)
     }
 
     private fun configureChart(

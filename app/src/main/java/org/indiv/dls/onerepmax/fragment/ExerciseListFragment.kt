@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseListBinding
@@ -32,22 +33,39 @@ class ExerciseListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerViewAdapter()
+        setupErrorHandling()
+        mainActivityViewModel.fetchExerciseListData()
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupRecyclerViewAdapter() {
         binding.exerciseRecyclerView.adapter = exerciseListAdapter
         mainActivityViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
             exerciseListAdapter.items = it
             exerciseListAdapter.notifyDataSetChanged()
         }
-        
+        setupItemClickListener()
+    }
+
+    private fun setupItemClickListener() {
         exerciseListAdapter.itemClickListener = { exerciseName ->
             val args = Bundle().apply { putString(resources.getString(R.string.key_exercise_name), exerciseName) }
             findNavController().navigate(R.id.action_ExerciseListFragment_to_ExerciseDetailFragment, args)
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupErrorHandling() {
+        mainActivityViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE).apply {
+                setAction(getString(R.string.button_text_ok)) { dismiss() }
+                show()
+            }
+        }
     }
 }
 

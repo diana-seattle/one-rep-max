@@ -9,7 +9,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.ActivityMainBinding
@@ -34,14 +33,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        mainActivityViewModel.fetchExerciseListData()
-        mainActivityViewModel.errorResultLiveData.observe(this) {
-            Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE).apply {
-                setAction(getString(R.string.button_text_ok)) { dismiss() }
-                show()
-            }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
