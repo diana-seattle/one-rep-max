@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             setDarkModeMenuText(menu.getItem(0), isDarkModeInSettings)
             return true
         }
-        return false
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
