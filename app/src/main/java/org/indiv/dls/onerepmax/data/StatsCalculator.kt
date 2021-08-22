@@ -1,7 +1,6 @@
 package org.indiv.dls.onerepmax.data
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import javax.inject.Inject

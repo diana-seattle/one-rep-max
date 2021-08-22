@@ -10,9 +10,4 @@
         <item name="android:alpha">.7</item>
     </style>
 
-    <style name="HomeGreeting">
-        <item name="android:textSize">24sp</item>
-        <item name="android:lineSpacingExtra">24dp</item>
-    </style>
-
 </resources>

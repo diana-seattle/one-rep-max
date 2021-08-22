@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/ExerciseFragment"
         android:name="org.indiv.dls.onerepmax.fragment.ExerciseListFragment"
-        android:label="@string/exercise_fragment_label"
+        android:label="@string/exercise_list_title"
         tools:layout="@layout/fragment_exercise_list">
 
         <action

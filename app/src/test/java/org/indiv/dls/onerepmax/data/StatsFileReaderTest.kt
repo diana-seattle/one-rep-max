@@ -17,7 +17,7 @@ import java.time.LocalDate
 
 class StatsFileReaderTest {
     companion object {
-        private val line1 = "Oct 11 2020,Back Squat,1,10,45\n"
+        private const val line1 = "Oct 11 2020,Back Squat,1,10,45\n"
         private val record1 = StatsRecord(
             dateOfWorkout = LocalDate.of(2020, 10, 11),
             exerciseName = "Back Squat",
@@ -26,7 +26,7 @@ class StatsFileReaderTest {
             weight = 45u
         )
 
-        private val line2 = "Apr 28 2019,Barbell Bench Press,2,4,140\n"
+        private const val line2 = "Apr 28 2019,Barbell Bench Press,2,4,140\n"
         private val record2 = StatsRecord(
             dateOfWorkout = LocalDate.of(2019, 4, 28),
             exerciseName = "Barbell Bench Press",
@@ -35,7 +35,7 @@ class StatsFileReaderTest {
             weight = 140u
         )
 
-        private val line3 = "Jul 15 2021,Deadlift,1,5,245\n"
+        private const val line3 = "Jul 15 2021,Deadlift,1,5,245\n"
         private val record3 = StatsRecord(
             dateOfWorkout = LocalDate.of(2021, 7, 15),
             exerciseName = "Deadlift",
