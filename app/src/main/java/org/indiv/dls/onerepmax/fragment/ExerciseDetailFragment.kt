@@ -71,7 +71,7 @@ class ExerciseDetailFragment : Fragment() {
 
         with(binding.chart) {
             axisRight.isEnabled = false
-            getLegend().isEnabled = false
+            legend.isEnabled = false
             description = null
             with(xAxis) {
                 setTextColor(textColor)

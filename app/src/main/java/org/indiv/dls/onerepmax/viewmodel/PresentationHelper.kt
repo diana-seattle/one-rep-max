@@ -1,5 +1,6 @@
 package org.indiv.dls.onerepmax.viewmodel
 
+import org.indiv.dls.onerepmax.data.ExerciseSummary
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -12,7 +13,7 @@ class PresentationHelper @Inject constructor() {
         private val monthDayFormatter = DateTimeFormatter.ofPattern("MMM d")
     }
 
-    fun getExercises(exerciseData: List<ExerciseWithStats>): List<ExercisePresentation> {
+    fun getExercises(exerciseData: List<ExerciseSummary>): List<ExercisePresentation> {
         return exerciseData.map { ExercisePresentation(it.exerciseName, it.oneRepMaxPersonalRecord.toString()) }
     }
 
@@ -28,8 +29,8 @@ class PresentationHelper @Inject constructor() {
 
         return ExerciseDetailPresentation(
             ExercisePresentation(
-                exerciseWithStats.exerciseName,
-                exerciseWithStats.oneRepMaxPersonalRecord.toString()
+                exerciseWithStats.exerciseSummary.exerciseName,
+                exerciseWithStats.exerciseSummary.oneRepMaxPersonalRecord.toString()
             ),
             dataPoints
         )

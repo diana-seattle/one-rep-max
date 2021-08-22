@@ -1,5 +1,6 @@
 package org.indiv.dls.onerepmax.viewmodel
 
+import org.indiv.dls.onerepmax.data.ExerciseSummary
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import org.indiv.dls.onerepmax.data.SingleDayResult
 import org.junit.Assert.*
@@ -14,8 +15,8 @@ class PresentationHelperTest {
     @Test
     fun getExercises() {
         val input = listOf(
-            createExerciseWithStats(exerciseName = "exercise1", oneRepMaxPersonalRecord = 15u),
-            createExerciseWithStats(exerciseName = "exercise2", oneRepMaxPersonalRecord = 12u)
+            createExerciseSummary(exerciseName = "exercise1", oneRepMaxPersonalRecord = 15u),
+            createExerciseSummary(exerciseName = "exercise2", oneRepMaxPersonalRecord = 12u)
         )
 
         val results = presentationHelper.getExercises(input)
@@ -33,8 +34,8 @@ class PresentationHelperTest {
 
         val result = presentationHelper.getExerciseDetail(input)
 
-        assertEquals(input.exerciseName, result.exerciseSummary.name)
-        assertEquals(input.oneRepMaxPersonalRecord.toString(), result.exerciseSummary.personalRecord)
+        assertEquals(input.exerciseSummary.exerciseName, result.exerciseSummary.name)
+        assertEquals(input.exerciseSummary.oneRepMaxPersonalRecord.toString(), result.exerciseSummary.personalRecord)
         assertEquals(input.singleDayResults.size, result.dataPoints.size)
         result.dataPoints.forEachIndexed { i, dataPoint ->
             assertEquals(i.toFloat(), dataPoint.xAxisValue)
@@ -45,7 +46,7 @@ class PresentationHelperTest {
     }
 
     private fun createExerciseWithStats(
-        exerciseName: String = "exercise1",
+        exerciseName: String = "exercise",
         oneRepMaxPersonalRecord: UInt = 15u,
         singleDayResults: List<SingleDayResult> = listOf(
             SingleDayResult(LocalDate.of(2020, 5, 12), 5u),
@@ -53,9 +54,18 @@ class PresentationHelperTest {
         )
     ): ExerciseWithStats {
         return ExerciseWithStats(
-            exerciseName = exerciseName,
-            oneRepMaxPersonalRecord = oneRepMaxPersonalRecord,
+            exerciseSummary = createExerciseSummary(exerciseName, oneRepMaxPersonalRecord),
             singleDayResults = singleDayResults
+        )
+    }
+
+    private fun createExerciseSummary(
+        exerciseName: String = "exercise",
+        oneRepMaxPersonalRecord: UInt = 15u
+    ): ExerciseSummary {
+        return ExerciseSummary(
+                exerciseName = exerciseName,
+                oneRepMaxPersonalRecord = oneRepMaxPersonalRecord
         )
     }
 }

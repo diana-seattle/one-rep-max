@@ -11,19 +11,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import org.indiv.dls.onerepmax.R
-import org.indiv.dls.onerepmax.data.ExerciseWithStats
-import org.indiv.dls.onerepmax.data.SharedPrefsHelper
-import org.indiv.dls.onerepmax.data.StatsCalculator
-import org.indiv.dls.onerepmax.data.StatsFileReader
+import org.indiv.dls.onerepmax.data.ExerciseRepository
 import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class ExercisesViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val sharedPrefsHelper: SharedPrefsHelper,
-    private val statsFileReader: StatsFileReader,
-    private val statsCalculator: StatsCalculator,
+    private val exerciseRepository: ExerciseRepository,
     private val presentationHelper: PresentationHelper
 ) : ViewModel() {
 
@@ -36,24 +31,12 @@ class ExercisesViewModel @Inject constructor(
     private val _errorResultLiveData = MutableLiveData<String>()
     val errorResultLiveData: LiveData<String> = _errorResultLiveData
 
-    // Master copy of all the data.
-    // Todo: If time, read results from the data file into a db at app load time, then have this viewmodel load only
-    //   the results needed from the db for the particular page.
-    private var exerciseData: List<ExerciseWithStats> = emptyList()
-    private var exerciseDataMap: Map<String, ExerciseWithStats> = emptyMap()
-
     fun fetchExerciseListData() {
-        // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that they will
-        // switch themselves to the appropriate thread.
+        // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that
+        // they will switch themselves to the appropriate thread.
         viewModelScope.launch {
             try {
-                // TODO: if time, read results from file into db at app load time, then have this viewmodel load only
-                //  the results needed from db.
-                exerciseData = statsCalculator.calculate(statsFileReader.readFile())
-                exerciseDataMap = exerciseData.map { it.exerciseName to it }.toMap()
-
-                _exerciseListLiveData.value = presentationHelper.getExercises(exerciseData)
-
+                _exerciseListLiveData.value = presentationHelper.getExercises(exerciseRepository.getExerciseSummaries())
             } catch (e: Exception) {
                 _errorResultLiveData.value = e.message
             }
@@ -61,14 +44,10 @@ class ExercisesViewModel @Inject constructor(
     }
 
     fun selectSingleExerciseData(name: String) {
-        // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that they will
-        // switch themselves to the appropriate thread.
+        // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that
+        // they will switch themselves to the appropriate thread.
         viewModelScope.launch {
-            if (exerciseData.isEmpty()) {
-                fetchExerciseListData()
-            }
-
-            exerciseDataMap[name]?.let {
+            exerciseRepository.getSingleExerciseData(name)?.let {
                 _exerciseDetailLiveData.value = presentationHelper.getExerciseDetail(it)
             }
         }
@@ -90,10 +69,10 @@ class ExercisesViewModel @Inject constructor(
     }
 
     fun isDarkModeInSettings(): Boolean {
-        return sharedPrefsHelper.isDarkMode()
+        return exerciseRepository.isDarkModeInSettings()
     }
 
     fun persistDarkMode(dark: Boolean) {
-        sharedPrefsHelper.persistDarkMode(dark)
+        exerciseRepository.persistDarkMode(dark)
     }
 }

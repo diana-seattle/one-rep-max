@@ -40,7 +40,7 @@ class StatsCalculatorTest {
         assertEquals(1, results.size) // one exercise
         val exerciseResult = results[0]
         assertEquals(2, exerciseResult.singleDayResults.size) // 2 days
-        assertEquals(31u, exerciseResult.oneRepMaxPersonalRecord)
+        assertEquals(31u, exerciseResult.exerciseSummary.oneRepMaxPersonalRecord)
         val day1Result = exerciseResult.singleDayResults[0]
         val day2Result = exerciseResult.singleDayResults[1]
         assertEquals(31u, day1Result.oneRepMax)
@@ -66,9 +66,9 @@ class StatsCalculatorTest {
         assertEquals(1, exercise1Result.singleDayResults.size) // 1 day
         assertEquals(1, exercise2Result.singleDayResults.size) // 1 day
         assertEquals(1, exercise3Result.singleDayResults.size) // 1 day
-        assertEquals(44u, exercise1Result.oneRepMaxPersonalRecord)
-        assertEquals(25u, exercise2Result.oneRepMaxPersonalRecord)
-        assertEquals(28u, exercise3Result.oneRepMaxPersonalRecord)
+        assertEquals(44u, exercise1Result.exerciseSummary.oneRepMaxPersonalRecord)
+        assertEquals(25u, exercise2Result.exerciseSummary.oneRepMaxPersonalRecord)
+        assertEquals(28u, exercise3Result.exerciseSummary.oneRepMaxPersonalRecord)
         assertEquals(44u, exercise1Result.singleDayResults[0].oneRepMax)
         assertEquals(25u, exercise2Result.singleDayResults[0].oneRepMax)
         assertEquals(28u, exercise3Result.singleDayResults[0].oneRepMax)
@@ -88,7 +88,7 @@ class StatsCalculatorTest {
         val exerciseResult = results[0]
         assertEquals(3, exerciseResult.singleDayResults.size) // 3 days
 
-        assertEquals(36u, exerciseResult.oneRepMaxPersonalRecord)
+        assertEquals(36u, exerciseResult.exerciseSummary.oneRepMaxPersonalRecord)
         exerciseResult.singleDayResults.forEach {
             assertEquals(36u, it.oneRepMax)
         }

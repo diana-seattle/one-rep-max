@@ -1,6 +1,5 @@
 package org.indiv.dls.onerepmax.data
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
@@ -39,12 +38,12 @@ class StatsCalculator @Inject constructor() {
         }
     }
 
-    private suspend fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>): ExerciseWithStats {
+    private fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>): ExerciseWithStats {
         val singleDayResults = records.groupBy { it.dateOfWorkout }.map {
             SingleDayResult(date = it.key, oneRepMax = calculateSingleDay(singleDayRecords = it.value))
         }
         val personalRecord = singleDayResults.maxOf { it.oneRepMax }
-        return ExerciseWithStats(exerciseName, personalRecord, singleDayResults)
+        return ExerciseWithStats(ExerciseSummary(exerciseName, personalRecord), singleDayResults)
     }
 
     private fun calculateSingleDay(singleDayRecords: List<StatsRecord>): UInt {
