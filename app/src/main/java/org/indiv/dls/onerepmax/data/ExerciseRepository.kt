@@ -10,7 +10,7 @@ class ExerciseRepository @Inject constructor(
     private val statsCalculator: StatsCalculator
 ) {
     // In-memory copy of all the data.
-    // TODO: If this is large, consider loading into a Room database.
+    // TODO: Consider loading into a Room database.
     private var exerciseSummaries: List<ExerciseSummary> = emptyList()
     private var exerciseDataMap: Map<String, ExerciseWithStats> = emptyMap()
 

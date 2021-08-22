@@ -33,16 +33,16 @@ class ExerciseListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        exerciseListAdapter.itemClickListener = { exerciseName ->
-            exercisesViewModel.selectSingleExerciseData(exerciseName)
-            val args = Bundle().apply { putString(resources.getString(R.string.key_exercise_name), exerciseName) }
-            findNavController().navigate(R.id.action_ExerciseListFragment_to_ExerciseDetailFragment, args)
-        }
-
         binding.exerciseRecyclerView.adapter = exerciseListAdapter
         exercisesViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
             exerciseListAdapter.items = it
             exerciseListAdapter.notifyDataSetChanged()
+        }
+        
+        exerciseListAdapter.itemClickListener = { exerciseName ->
+            exercisesViewModel.selectSingleExerciseData(exerciseName)
+            val args = Bundle().apply { putString(resources.getString(R.string.key_exercise_name), exerciseName) }
+            findNavController().navigate(R.id.action_ExerciseListFragment_to_ExerciseDetailFragment, args)
         }
     }
 

@@ -3,6 +3,7 @@ package org.indiv.dls.onerepmax.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.roundToInt
@@ -16,25 +17,10 @@ class StatsCalculator @Inject constructor() {
 
     suspend fun calculate(records: List<StatsRecord>): List<ExerciseWithStats> {
         return withContext(Dispatchers.Default) {
-            // This function could be as simple as:
-            //
-            //   records.groupBy { it.exerciseName }.map {
-            //      calculateSingleExercise(exerciseName = it.key, records = it.value)
-            //   }
-            //
-            // except that we need to make it cancellable with the call to isActive(). For some reason using
-            // yield() causes the tests to hang, which I'll investigate if I have more time (todo).
-
-            val groupedByExercise = records.groupBy { it.exerciseName }
-
-            val results = mutableListOf<ExerciseWithStats>()
-            val iterator = groupedByExercise.iterator()
-            while (isActive && iterator.hasNext()) {
-                val mapEntry = iterator.next()
-                results.add(calculateSingleExercise(exerciseName = mapEntry.key, records = mapEntry.value))
+            records.groupBy { it.exerciseName }.map {
+                yield()
+                calculateSingleExercise(exerciseName = it.key, records = it.value)
             }
-
-            results
         }
     }
 
