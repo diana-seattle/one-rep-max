@@ -3,7 +3,9 @@ Example app that displays one-repetition max (1 RM) info based on workout data.
 
 ## Features
 1. List of exercises, navigation to charted data for each 
-2. Dark mode menu item for earlier Android versions (< API29) that do not support dark mode in system settings 
+2. Dark mode 
+    * Android 10+: set according to system settings
+    * Android 9 and below: set via menu item within app
 3. Portrait and landscape modes
 4. Animated fragment transitions
 
@@ -20,3 +22,4 @@ Example app that displays one-repetition max (1 RM) info based on workout data.
 * Themes/styles
 * Coordinator and Constraint layouts
 * View binding (which replaces findViewById)
+* Shared preferences (for dark mode on Android 9 and below)

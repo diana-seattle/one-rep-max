@@ -58,6 +58,8 @@ class ExerciseDetailFragment : Fragment() {
     }
 
     private fun bindSummaryData(presentation: ExercisePresentation) {
+        // TODO create a custom view since this summary layout is shared with the recyclerView view holder
+
         binding.exerciseSummary.exerciseName.text = presentation.name
         binding.exerciseSummary.onerepmaxPersonalRecord.text = presentation.personalRecord
     }
@@ -71,6 +73,8 @@ class ExerciseDetailFragment : Fragment() {
         dataPoints: List<DataPoint>,
         lineDataSet: LineDataSet
     ) {
+        // TODO create a custom view to encapsulate this vendor-specific logic
+
         val textColor = getThemeColor(android.R.attr.textColor)
         with(binding.chart) {
             axisRight.isEnabled = false
