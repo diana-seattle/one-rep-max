@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.indiv.dls.onerepmax.databinding.ViewholderExerciseBinding
-import org.indiv.dls.onerepmax.viewmodel.ExercisePresentation
+import org.indiv.dls.onerepmax.uicomponent.ExerciseSummaryView
 import javax.inject.Inject
 
 class ExerciseListAdapter @Inject constructor() : RecyclerView.Adapter<ExerciseViewHolder>() {
 
-    var items: List<ExercisePresentation> = emptyList()
+    var items: List<ExerciseSummaryView.Presentation> = emptyList()
     var itemClickListener: ((String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
@@ -19,10 +19,9 @@ class ExerciseListAdapter @Inject constructor() : RecyclerView.Adapter<ExerciseV
 
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
         with(items[position]) {
-            holder.binding.exerciseName.text = name
-            holder.binding.onerepmaxPersonalRecord.text = personalRecord
+            holder.binding.root.bindPresentation(this)
             holder.binding.root.setOnClickListener {
-                itemClickListener?.invoke(items[position].name)
+                itemClickListener?.invoke(name)
             }
         }
     }

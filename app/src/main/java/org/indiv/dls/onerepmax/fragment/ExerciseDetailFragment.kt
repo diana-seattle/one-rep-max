@@ -10,7 +10,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.databinding.FragmentExerciseDetailBinding
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.viewmodel.ExerciseDetailViewModel
-import org.indiv.dls.onerepmax.viewmodel.ExercisePresentation
 
 
 @AndroidEntryPoint
@@ -35,7 +34,7 @@ class ExerciseDetailFragment : Fragment() {
         exerciseDetailViewModel.fetchSingleExerciseData(arguments?.getString(exerciseNameArgKey)!!)
 
         exerciseDetailViewModel.exerciseDetailLiveData.observe(viewLifecycleOwner) { presentation ->
-            bindSummaryData(presentation.exercise)
+            binding.exerciseSummary.bindPresentation(presentation.exerciseSummary)
             binding.chart.setData(presentation.dataPoints)
         }
     }
@@ -43,12 +42,5 @@ class ExerciseDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun bindSummaryData(presentation: ExercisePresentation) {
-        // TODO create a custom view since this summary layout is shared with the recyclerView view holder
-
-        binding.exerciseSummary.exerciseName.text = presentation.name
-        binding.exerciseSummary.onerepmaxPersonalRecord.text = presentation.personalRecord
     }
 }

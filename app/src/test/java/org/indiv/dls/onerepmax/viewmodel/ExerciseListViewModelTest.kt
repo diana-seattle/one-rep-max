@@ -16,6 +16,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.indiv.dls.onerepmax.data.ExerciseRepository
 import org.indiv.dls.onerepmax.data.ExerciseSummary
+import org.indiv.dls.onerepmax.uicomponent.ExerciseSummaryView
 import org.junit.Assert.*
 
 import org.junit.After
@@ -32,7 +33,7 @@ class ExerciseListViewModelTest {
             exerciseName = exerciseName,
             oneRepMaxPersonalRecord = oneRepMax
         ))
-        private val exercisePresentations = listOf(ExercisePresentation(
+        private val exerciseSummaryPresentations = listOf(ExerciseSummaryView.Presentation(
             name = exerciseName,
             personalRecord = oneRepMax.toString()
         ))
@@ -52,7 +53,7 @@ class ExerciseListViewModelTest {
 
     @InjectMockKs lateinit var exerciseListViewModel: ExerciseListViewModel
 
-    private var observedExercisePresentations: List<ExercisePresentation>? = null
+    private var observedExerciseSummaryPresentations: List<ExerciseSummaryView.Presentation>? = null
 
     @ExperimentalCoroutinesApi
     @Before
@@ -61,9 +62,9 @@ class ExerciseListViewModelTest {
         Dispatchers.setMain(testCoroutineDispatcher)
 
         coEvery { exerciseRepository.getExerciseSummaries() } returns exerciseSummaries
-        every { presentationHelper.getExercises(exerciseSummaries) } returns exercisePresentations
+        every { presentationHelper.getExercises(exerciseSummaries) } returns exerciseSummaryPresentations
 
-        exerciseListViewModel.exerciseListLiveData.observeForever { observedExercisePresentations = it }
+        exerciseListViewModel.exerciseListLiveData.observeForever { observedExerciseSummaryPresentations = it }
     }
 
     @ExperimentalCoroutinesApi
@@ -77,7 +78,7 @@ class ExerciseListViewModelTest {
     fun fetchExerciseListData() = runBlocking {
         exerciseListViewModel.fetchExerciseListData()
 
-        assertEquals(exercisePresentations, observedExercisePresentations)
+        assertEquals(exerciseSummaryPresentations, observedExerciseSummaryPresentations)
         coVerify { exerciseRepository.getExerciseSummaries() }
         verify { presentationHelper.getExercises(exerciseSummaries) }
     }

@@ -3,6 +3,7 @@ package org.indiv.dls.onerepmax.viewmodel
 import org.indiv.dls.onerepmax.data.ExerciseSummary
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import org.indiv.dls.onerepmax.uicomponent.ChartView
+import org.indiv.dls.onerepmax.uicomponent.ExerciseSummaryView
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -14,8 +15,8 @@ class PresentationHelper @Inject constructor() {
         private val monthDayFormatter = DateTimeFormatter.ofPattern("MMM d")
     }
 
-    fun getExercises(exerciseData: List<ExerciseSummary>): List<ExercisePresentation> {
-        return exerciseData.map { ExercisePresentation(it.exerciseName, it.oneRepMaxPersonalRecord.toString()) }
+    fun getExercises(exerciseData: List<ExerciseSummary>): List<ExerciseSummaryView.Presentation> {
+        return exerciseData.map { ExerciseSummaryView.Presentation(it.exerciseName, it.oneRepMaxPersonalRecord.toString()) }
     }
 
     fun getExerciseDetail(exerciseWithStats: ExerciseWithStats): ExerciseDetailPresentation {
@@ -29,7 +30,7 @@ class PresentationHelper @Inject constructor() {
         }
 
         return ExerciseDetailPresentation(
-            ExercisePresentation(
+            ExerciseSummaryView.Presentation(
                 exerciseWithStats.exerciseSummary.exerciseName,
                 exerciseWithStats.exerciseSummary.oneRepMaxPersonalRecord.toString()
             ),

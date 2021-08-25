@@ -1,13 +1,9 @@
 package org.indiv.dls.onerepmax.viewmodel
 
 import org.indiv.dls.onerepmax.uicomponent.ChartView
-
-data class ExercisePresentation(
-    val name: String,
-    val personalRecord: String
-)
+import org.indiv.dls.onerepmax.uicomponent.ExerciseSummaryView
 
 data class ExerciseDetailPresentation(
-    val exercise: ExercisePresentation,
+    val exerciseSummary: ExerciseSummaryView.Presentation,
     val dataPoints: List<ChartView.DataPoint>
 )

@@ -22,5 +22,5 @@ Example app that displays one-repetition max (1 RM) info based on workout data.
 * Themes/styles
 * Coordinator and Constraint layouts
 * View binding (which replaces findViewById)
-* Custom view
+* Custom views
 * Shared preferences (for dark mode on Android 9 and below)
