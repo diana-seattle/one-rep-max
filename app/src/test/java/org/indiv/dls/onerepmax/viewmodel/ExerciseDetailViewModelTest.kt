@@ -19,6 +19,7 @@ import org.indiv.dls.onerepmax.data.ExerciseRepository
 import org.indiv.dls.onerepmax.data.ExerciseSummary
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
 import org.indiv.dls.onerepmax.data.SingleDayResult
+import org.indiv.dls.onerepmax.uicomponent.ChartView
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -37,7 +38,7 @@ class ExerciseDetailViewModelTest {
         )
         private val exerciseDetailPresentation = ExerciseDetailPresentation(
             exercise = ExercisePresentation(name = exerciseName, personalRecord = oneRepMax.toString()),
-            dataPoints = listOf(DataPoint("Jul 3", 1f, 50f))
+            dataPoints = listOf(ChartView.DataPoint("Jul 3", 1f, 50f))
         )
     }
 

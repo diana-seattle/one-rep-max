@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.github.mikephil.charting.charts.LineChart
+    <org.indiv.dls.onerepmax.uicomponent.ChartView
         android:id="@+id/chart"
         android:layout_width="0dp"
         android:layout_height="0dp"

@@ -2,6 +2,7 @@ package org.indiv.dls.onerepmax.viewmodel
 
 import org.indiv.dls.onerepmax.data.ExerciseSummary
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
+import org.indiv.dls.onerepmax.uicomponent.ChartView
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class PresentationHelper @Inject constructor() {
     fun getExerciseDetail(exerciseWithStats: ExerciseWithStats): ExerciseDetailPresentation {
         val sortedResults = exerciseWithStats.singleDayResults.sortedBy { it.date }
         val dataPoints = sortedResults.mapIndexed { index, result ->
-            DataPoint(
+            ChartView.DataPoint(
                 xAxisLabel = formatDateLabel(result.date),
                 xAxisValue = index.toFloat(),
                 yAxisValue = result.oneRepMax.toFloat()

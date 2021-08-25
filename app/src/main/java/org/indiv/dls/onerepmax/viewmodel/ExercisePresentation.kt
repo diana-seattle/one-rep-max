@@ -1,5 +1,7 @@
 package org.indiv.dls.onerepmax.viewmodel
 
+import org.indiv.dls.onerepmax.uicomponent.ChartView
+
 data class ExercisePresentation(
     val name: String,
     val personalRecord: String
@@ -7,11 +9,5 @@ data class ExercisePresentation(
 
 data class ExerciseDetailPresentation(
     val exercise: ExercisePresentation,
-    val dataPoints: List<DataPoint>
-)
-
-data class DataPoint(
-    val xAxisLabel: String,
-    val xAxisValue: Float,
-    val yAxisValue: Float
+    val dataPoints: List<ChartView.DataPoint>
 )
