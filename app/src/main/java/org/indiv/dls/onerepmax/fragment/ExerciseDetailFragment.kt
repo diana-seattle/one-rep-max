@@ -30,9 +30,6 @@ class ExerciseDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val exerciseNameArgKey = resources.getString(R.string.key_exercise_name)
-        exerciseDetailViewModel.fetchSingleExerciseData(arguments?.getString(exerciseNameArgKey)!!)
-
         exerciseDetailViewModel.exerciseDetailLiveData.observe(viewLifecycleOwner) { presentation ->
             binding.exerciseSummary.bindPresentation(presentation.exerciseSummary)
             binding.chart.setData(presentation.dataPoints)

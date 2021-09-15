@@ -1,7 +1,9 @@
 package org.indiv.dls.onerepmax.viewmodel
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.SavedStateHandle
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -15,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.data.ExerciseRepository
 import org.indiv.dls.onerepmax.data.ExerciseSummary
 import org.indiv.dls.onerepmax.data.ExerciseWithStats
@@ -32,6 +35,7 @@ class ExerciseDetailViewModelTest {
 
     companion object {
         private const val exerciseName = "Bench Press"
+        private const val exerciseNameKey = "myExerciseNameKey"
         private const val oneRepMax = 250u
         private val exerciseWithStats = ExerciseWithStats(
             exerciseSummary = ExerciseSummary(exerciseName, oneRepMax),
@@ -52,10 +56,12 @@ class ExerciseDetailViewModelTest {
     private val testCoroutineDispatcher = TestCoroutineDispatcher()
 
     @MockK lateinit var context: Context
+    @MockK lateinit var resources: Resources
+    @MockK lateinit var savedStateHandle: SavedStateHandle
     @MockK lateinit var exerciseRepository: ExerciseRepository
     @MockK lateinit var presentationHelper: PresentationHelper
 
-    @InjectMockKs lateinit var exerciseDetailViewModel: ExerciseDetailViewModel
+    lateinit var exerciseDetailViewModel: ExerciseDetailViewModel
 
     private var observedExerciseDetailPresentation: ExerciseDetailPresentation? = null
 
@@ -67,6 +73,11 @@ class ExerciseDetailViewModelTest {
 
         coEvery { exerciseRepository.getSingleExerciseDetail(exerciseName) } returns exerciseWithStats
         every { presentationHelper.getExerciseDetail(exerciseWithStats) } returns exerciseDetailPresentation
+        every { context.resources } returns resources
+        every { resources.getString(R.string.key_exercise_name) } returns exerciseNameKey
+        every { savedStateHandle.get<String>(exerciseNameKey) } returns exerciseName
+
+        exerciseDetailViewModel = ExerciseDetailViewModel(context, savedStateHandle, exerciseRepository, presentationHelper)
 
         exerciseDetailViewModel.exerciseDetailLiveData.observeForever { observedExerciseDetailPresentation = it }
     }
@@ -80,9 +91,12 @@ class ExerciseDetailViewModelTest {
 
     @Test
     fun fetchSingleExerciseData() = runBlocking {
-        exerciseDetailViewModel.fetchSingleExerciseData(exerciseName)
-        assertEquals(exerciseDetailPresentation, observedExerciseDetailPresentation)
+        // verify calls made from the view model init block upon construction
+        verify { context.resources }
+        verify { resources.getString(R.string.key_exercise_name) }
+        verify { savedStateHandle.get<String>(exerciseNameKey) }
         coVerify { exerciseRepository.getSingleExerciseDetail(exerciseName) }
         verify { presentationHelper.getExerciseDetail(exerciseWithStats) }
+        assertEquals(exerciseDetailPresentation, observedExerciseDetailPresentation)
     }
 }
