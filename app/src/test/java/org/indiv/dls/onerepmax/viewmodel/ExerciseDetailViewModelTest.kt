@@ -77,6 +77,7 @@ class ExerciseDetailViewModelTest {
         every { resources.getString(R.string.key_exercise_name) } returns exerciseNameKey
         every { savedStateHandle.get<String>(exerciseNameKey) } returns exerciseName
 
+        // Construct view model after mocking its dependencies because it performs work in its init block
         exerciseDetailViewModel = ExerciseDetailViewModel(context, savedStateHandle, exerciseRepository, presentationHelper)
 
         exerciseDetailViewModel.exerciseDetailLiveData.observeForever { observedExerciseDetailPresentation = it }

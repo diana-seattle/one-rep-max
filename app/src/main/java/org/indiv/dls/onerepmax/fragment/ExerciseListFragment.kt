@@ -35,7 +35,6 @@ class ExerciseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerViewAdapter()
         setupErrorHandling()
-        exerciseListViewModel.fetchExerciseListData()
     }
 
     override fun onDestroyView() {

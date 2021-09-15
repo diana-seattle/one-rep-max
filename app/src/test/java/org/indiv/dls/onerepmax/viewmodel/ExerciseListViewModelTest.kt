@@ -51,7 +51,7 @@ class ExerciseListViewModelTest {
     @MockK lateinit var exerciseRepository: ExerciseRepository
     @MockK lateinit var presentationHelper: PresentationHelper
 
-    @InjectMockKs lateinit var exerciseListViewModel: ExerciseListViewModel
+    lateinit var exerciseListViewModel: ExerciseListViewModel
 
     private var observedExerciseSummaryPresentations: List<ExerciseSummaryView.Presentation>? = null
 
@@ -63,6 +63,9 @@ class ExerciseListViewModelTest {
 
         coEvery { exerciseRepository.getExerciseSummaries() } returns exerciseSummaries
         every { presentationHelper.getExercises(exerciseSummaries) } returns exerciseSummaryPresentations
+
+        // Construct view model after mocking its dependencies because it performs work in its init block
+        exerciseListViewModel = ExerciseListViewModel(exerciseRepository, presentationHelper)
 
         exerciseListViewModel.exerciseListLiveData.observeForever { observedExerciseSummaryPresentations = it }
     }
@@ -76,8 +79,7 @@ class ExerciseListViewModelTest {
 
     @Test
     fun fetchExerciseListData() = runBlocking {
-        exerciseListViewModel.fetchExerciseListData()
-
+        // verify calls made from the view model init block upon construction
         assertEquals(exerciseSummaryPresentations, observedExerciseSummaryPresentations)
         coVerify { exerciseRepository.getExerciseSummaries() }
         verify { presentationHelper.getExercises(exerciseSummaries) }
