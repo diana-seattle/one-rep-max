@@ -45,8 +45,7 @@ class ExerciseListFragment : Fragment() {
     private fun setupRecyclerViewAdapter() {
         binding.exerciseRecyclerView.adapter = exerciseListAdapter
         exerciseListViewModel.exerciseListLiveData.observe(viewLifecycleOwner) {
-            exerciseListAdapter.items = it
-            exerciseListAdapter.notifyDataSetChanged()
+            exerciseListAdapter.submitList(it)
         }
         setupItemClickListener()
     }
