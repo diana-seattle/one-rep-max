@@ -16,7 +16,11 @@ class PresentationHelper @Inject constructor() {
     }
 
     fun getExercises(exerciseData: List<ExerciseSummary>): List<ExerciseSummaryView.Presentation> {
-        return exerciseData.map { ExerciseSummaryView.Presentation(it.exerciseName, it.oneRepMaxPersonalRecord.toString()) }
+        return exerciseData.map { ExerciseSummaryView.Presentation(
+            exerciseId = it.exerciseId,
+            name = it.exerciseName,
+            personalRecord = it.oneRepMaxPersonalRecord.toString()
+        ) }
     }
 
     fun getExerciseDetail(exerciseWithStats: ExerciseWithStats): ExerciseDetailPresentation {
@@ -31,6 +35,7 @@ class PresentationHelper @Inject constructor() {
 
         return ExerciseDetailPresentation(
             ExerciseSummaryView.Presentation(
+                exerciseWithStats.exerciseSummary.exerciseId,
                 exerciseWithStats.exerciseSummary.exerciseName,
                 exerciseWithStats.exerciseSummary.oneRepMaxPersonalRecord.toString()
             ),

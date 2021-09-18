@@ -6,6 +6,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
+import kotlin.math.roundToInt
 
 class StatsCalculatorTest {
     companion object {
@@ -39,14 +40,17 @@ class StatsCalculatorTest {
 
         assertEquals(1, results.size) // one exercise
         val exerciseResult = results[0]
-        assertEquals(2, exerciseResult.singleDayResults.size) // 2 days
-        assertEquals(31u, exerciseResult.exerciseSummary.oneRepMaxPersonalRecord)
-        val day1Result = exerciseResult.singleDayResults[0]
-        val day2Result = exerciseResult.singleDayResults[1]
+        assertEquals(2, exerciseResult.daysWithFullDetail.size) // 2 days
+        assertEquals(31u, exerciseResult.oneRepMaxPersonalRecord)
+        val day1Result = exerciseResult.daysWithFullDetail[0]
+        val day2Result = exerciseResult.daysWithFullDetail[1]
         assertEquals(31u, day1Result.oneRepMax)
         assertEquals(28u, day2Result.oneRepMax)
         assertEquals(day1, day1Result.date)
         assertEquals(day2, day2Result.date)
+        assertEquals(2, day1Result.calculatedStatsRecords.size)
+        assertEquals(1, day2Result.calculatedStatsRecords.size)
+        assertEquals(28, day2Result.calculatedStatsRecords[0].oneRepMax.roundToInt())
     }
 
     @Test
@@ -63,15 +67,21 @@ class StatsCalculatorTest {
         val exercise1Result = results[0]
         val exercise2Result = results[1]
         val exercise3Result = results[2]
-        assertEquals(1, exercise1Result.singleDayResults.size) // 1 day
-        assertEquals(1, exercise2Result.singleDayResults.size) // 1 day
-        assertEquals(1, exercise3Result.singleDayResults.size) // 1 day
-        assertEquals(44u, exercise1Result.exerciseSummary.oneRepMaxPersonalRecord)
-        assertEquals(25u, exercise2Result.exerciseSummary.oneRepMaxPersonalRecord)
-        assertEquals(28u, exercise3Result.exerciseSummary.oneRepMaxPersonalRecord)
-        assertEquals(44u, exercise1Result.singleDayResults[0].oneRepMax)
-        assertEquals(25u, exercise2Result.singleDayResults[0].oneRepMax)
-        assertEquals(28u, exercise3Result.singleDayResults[0].oneRepMax)
+        assertEquals(1, exercise1Result.daysWithFullDetail.size) // 1 day
+        assertEquals(1, exercise2Result.daysWithFullDetail.size) // 1 day
+        assertEquals(1, exercise3Result.daysWithFullDetail.size) // 1 day
+        assertEquals(44u, exercise1Result.oneRepMaxPersonalRecord)
+        assertEquals(25u, exercise2Result.oneRepMaxPersonalRecord)
+        assertEquals(28u, exercise3Result.oneRepMaxPersonalRecord)
+        assertEquals(44u, exercise1Result.daysWithFullDetail[0].oneRepMax)
+        assertEquals(25u, exercise2Result.daysWithFullDetail[0].oneRepMax)
+        assertEquals(28u, exercise3Result.daysWithFullDetail[0].oneRepMax)
+        assertEquals(1, exercise1Result.daysWithFullDetail[0].calculatedStatsRecords.size)
+        assertEquals(1, exercise2Result.daysWithFullDetail[0].calculatedStatsRecords.size)
+        assertEquals(1, exercise3Result.daysWithFullDetail[0].calculatedStatsRecords.size)
+        assertEquals(44, exercise1Result.daysWithFullDetail[0].calculatedStatsRecords[0].oneRepMax.roundToInt())
+        assertEquals(25, exercise2Result.daysWithFullDetail[0].calculatedStatsRecords[0].oneRepMax.roundToInt())
+        assertEquals(28, exercise3Result.daysWithFullDetail[0].calculatedStatsRecords[0].oneRepMax.roundToInt())
     }
 
     @Test
@@ -86,10 +96,10 @@ class StatsCalculatorTest {
 
         assertEquals(1, results.size) // one exercise
         val exerciseResult = results[0]
-        assertEquals(3, exerciseResult.singleDayResults.size) // 3 days
+        assertEquals(3, exerciseResult.daysWithFullDetail.size) // 3 days
 
-        assertEquals(36u, exerciseResult.exerciseSummary.oneRepMaxPersonalRecord)
-        exerciseResult.singleDayResults.forEach {
+        assertEquals(36u, exerciseResult.oneRepMaxPersonalRecord)
+        exerciseResult.daysWithFullDetail.forEach {
             assertEquals(36u, it.oneRepMax)
         }
     }

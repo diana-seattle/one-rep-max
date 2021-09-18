@@ -22,7 +22,7 @@ class ExerciseListAdapter @Inject constructor()
         }
     }
 
-    var itemClickListener: ((String) -> Unit)? = null
+    var itemClickListener: ((ExerciseSummaryView.Presentation) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
         val binding = ViewholderExerciseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,7 +33,7 @@ class ExerciseListAdapter @Inject constructor()
         with(getItem(position)) {
             holder.binding.root.bindPresentation(this)
             holder.binding.root.setOnClickListener {
-                itemClickListener?.invoke(name)
+                itemClickListener?.invoke(this)
             }
         }
     }

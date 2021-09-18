@@ -8,8 +8,9 @@
     <!-- fragment title-->
     <string name="exercise_list_title">Exercises - 1 RM</string>
 
-    <!-- bundle key-->
+    <!-- bundle keys-->
     <string name="key_exercise_name">exerciseName</string>
+    <string name="key_exercise_id">exerciseId</string>
 
     <!-- chart -->
     <string name="yaxis_label">%1$d lbs</string>

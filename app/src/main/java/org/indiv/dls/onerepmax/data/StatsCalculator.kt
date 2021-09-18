@@ -3,6 +3,7 @@ package org.indiv.dls.onerepmax.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.roundToInt
@@ -14,7 +15,7 @@ class StatsCalculator @Inject constructor() {
         private const val MAX_ALLOWED_REPS = 36u
     }
 
-    suspend fun calculate(records: List<StatsRecord>): List<ExerciseWithStats> {
+    suspend fun calculate(records: List<StatsRecord>): List<ExerciseWithFullDetail> {
         return withContext(Dispatchers.Default) {
             records.groupBy { it.exerciseName }.map {
                 yield()
@@ -23,21 +24,35 @@ class StatsCalculator @Inject constructor() {
         }
     }
 
-    private fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>): ExerciseWithStats {
-        val singleDayResults = records.groupBy { it.dateOfWorkout }.map {
-            SingleDayResult(date = it.key, oneRepMax = calculateSingleDay(singleDayRecords = it.value))
+    private fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>
+    ): ExerciseWithFullDetail {
+        val dayWithCalculatedStatsRecords = records.groupBy { it.dateOfWorkout }.map {
+            calculateSingleDay(date = it.key, singleDayRecords = it.value)
         }
-        val personalRecord = singleDayResults.maxOf { it.oneRepMax }
-        return ExerciseWithStats(ExerciseSummary(exerciseName, personalRecord), singleDayResults)
+        return ExerciseWithFullDetail(
+            exerciseName = exerciseName,
+            oneRepMaxPersonalRecord = dayWithCalculatedStatsRecords.maxOf { it.oneRepMax },
+            daysWithFullDetail = dayWithCalculatedStatsRecords
+        )
     }
 
-    private fun calculateSingleDay(singleDayRecords: List<StatsRecord>): UInt {
+    private fun calculateSingleDay(date: LocalDate, singleDayRecords: List<StatsRecord>
+    ): DayWithFullDetail {
+        val calculatedStatsRecords = singleDayRecords.map {
+            CalculatedStatsRecord(statsRecord = it, brzycki(it.weight, it.reps))
+        }
+
         // Even though the sets value may always be one, playing it safe here and using it as a multiplier.
-        val sumOfValues = singleDayRecords.map { it.sets.toDouble() * brzycki(it.weight, it.reps) }
-            .sum()
-        val countOfValues = singleDayRecords.map { it.sets }
-            .sum()
-        return average(sumOfValues, countOfValues)
+        val sumOfValues = calculatedStatsRecords.map {
+            it.statsRecord.sets.toDouble() * it.oneRepMax
+        }.sum()
+        val countOfValues = singleDayRecords.map { it.sets }.sum()
+
+        return DayWithFullDetail(
+            date = date,
+            oneRepMax = average(sumOfValues, countOfValues),
+            calculatedStatsRecords = calculatedStatsRecords
+        )
     }
 
     private fun average(sumOfValues: Double, countOfValues: UInt): UInt {

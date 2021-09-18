@@ -34,6 +34,7 @@ class PresentationHelperTest {
 
         val result = presentationHelper.getExerciseDetail(input)
 
+        assertEquals(input.exerciseSummary.exerciseId, result.exerciseSummary.exerciseId)
         assertEquals(input.exerciseSummary.exerciseName, result.exerciseSummary.name)
         assertEquals(input.exerciseSummary.oneRepMaxPersonalRecord.toString(), result.exerciseSummary.personalRecord)
         assertEquals(input.singleDayResults.size, result.dataPoints.size)
@@ -46,6 +47,7 @@ class PresentationHelperTest {
     }
 
     private fun createExerciseWithStats(
+        exerciseId: String = "123",
         exerciseName: String = "exercise",
         oneRepMaxPersonalRecord: UInt = 15u,
         singleDayResults: List<SingleDayResult> = listOf(
@@ -54,18 +56,20 @@ class PresentationHelperTest {
         )
     ): ExerciseWithStats {
         return ExerciseWithStats(
-            exerciseSummary = createExerciseSummary(exerciseName, oneRepMaxPersonalRecord),
+            exerciseSummary = createExerciseSummary(exerciseId, exerciseName, oneRepMaxPersonalRecord),
             singleDayResults = singleDayResults
         )
     }
 
     private fun createExerciseSummary(
+        exerciseId: String = "123",
         exerciseName: String = "exercise",
         oneRepMaxPersonalRecord: UInt = 15u
     ): ExerciseSummary {
         return ExerciseSummary(
-                exerciseName = exerciseName,
-                oneRepMaxPersonalRecord = oneRepMaxPersonalRecord
+            exerciseId = exerciseId,
+            exerciseName = exerciseName,
+            oneRepMaxPersonalRecord = oneRepMaxPersonalRecord
         )
     }
 }

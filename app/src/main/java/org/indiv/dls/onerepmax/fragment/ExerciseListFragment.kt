@@ -51,8 +51,11 @@ class ExerciseListFragment : Fragment() {
     }
 
     private fun setupItemClickListener() {
-        exerciseListAdapter.itemClickListener = { exerciseName ->
-            val args = Bundle().apply { putString(resources.getString(R.string.key_exercise_name), exerciseName) }
+        exerciseListAdapter.itemClickListener = { summary ->
+            val args = Bundle().apply {
+                putString(resources.getString(R.string.key_exercise_id), summary.exerciseId)
+                putString(resources.getString(R.string.key_exercise_name), summary.name)
+            }
             findNavController().navigate(R.id.action_ExerciseListFragment_to_ExerciseDetailFragment, args)
         }
     }

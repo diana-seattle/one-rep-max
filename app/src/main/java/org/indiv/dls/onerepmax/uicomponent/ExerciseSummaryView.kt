@@ -14,7 +14,7 @@ class ExerciseSummaryView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ): ConstraintLayout(context, attrs, defStyleAttr) {
 
-    data class Presentation(val name: String, val personalRecord: String)
+    data class Presentation(val exerciseId: String, val name: String, val personalRecord: String)
 
     var binding: ViewExerciseSummaryBinding =
         ViewExerciseSummaryBinding.inflate(LayoutInflater.from(context), this)

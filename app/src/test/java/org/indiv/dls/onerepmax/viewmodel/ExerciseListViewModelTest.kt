@@ -5,7 +5,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -27,13 +26,16 @@ import org.junit.Test
 class ExerciseListViewModelTest {
 
     companion object {
+        private const val exerciseId = "123"
         private const val exerciseName = "Bench Press"
         private const val oneRepMax = 250u
         private val exerciseSummaries = listOf(ExerciseSummary(
+            exerciseId = exerciseId,
             exerciseName = exerciseName,
             oneRepMaxPersonalRecord = oneRepMax
         ))
         private val exerciseSummaryPresentations = listOf(ExerciseSummaryView.Presentation(
+            exerciseId = exerciseId,
             name = exerciseName,
             personalRecord = oneRepMax.toString()
         ))

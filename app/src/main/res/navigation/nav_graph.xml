@@ -28,5 +28,8 @@
         <argument
             android:name="@string/key_exercise_name"
             app:argType="string" />
+        <argument
+            android:name="@string/key_exercise_id"
+            app:argType="string" />
     </fragment>
 </navigation>

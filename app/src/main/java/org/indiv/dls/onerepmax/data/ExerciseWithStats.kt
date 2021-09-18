@@ -7,6 +7,10 @@ data class ExerciseWithStats(
     val singleDayResults: List<SingleDayResult>
 )
 
-data class ExerciseSummary(val exerciseName: String, val oneRepMaxPersonalRecord: UInt)
+data class ExerciseSummary(
+    val exerciseId: String,
+    val exerciseName: String,
+    val oneRepMaxPersonalRecord: UInt
+)
 
 data class SingleDayResult(val date: LocalDate, val oneRepMax: UInt)

@@ -25,15 +25,15 @@ class ExerciseDetailViewModel @Inject constructor(
     val exerciseDetailLiveData: LiveData<ExerciseDetailPresentation> = _exerciseDetailLiveData
 
     init {
-        val exerciseName = savedStateHandle.get<String>(context.resources.getString(R.string.key_exercise_name))
-        exerciseName?.let { fetchSingleExerciseData(it) }
+        val exerciseId = savedStateHandle.get<String>(context.resources.getString(R.string.key_exercise_id))
+        exerciseId?.let { fetchSingleExerciseData(it) }
     }
 
-    private fun fetchSingleExerciseData(name: String) {
+    private fun fetchSingleExerciseData(exerciseId: String) {
         // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that
         // they will switch themselves to the appropriate thread.
         viewModelScope.launch {
-            exerciseRepository.getSingleExerciseDetail(name)?.let {
+            exerciseRepository.getSingleExerciseDetail(exerciseId)?.let {
                 _exerciseDetailLiveData.value = presentationHelper.getExerciseDetail(it)
             }
         }

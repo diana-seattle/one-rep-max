@@ -8,7 +8,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -34,15 +33,20 @@ import java.time.LocalDate
 class ExerciseDetailViewModelTest {
 
     companion object {
+        private const val exerciseId = "123"
         private const val exerciseName = "Bench Press"
-        private const val exerciseNameKey = "myExerciseNameKey"
+        private const val exerciseIdKey = "myExerciseNameKey"
         private const val oneRepMax = 250u
         private val exerciseWithStats = ExerciseWithStats(
-            exerciseSummary = ExerciseSummary(exerciseName, oneRepMax),
+            exerciseSummary = ExerciseSummary(exerciseId, exerciseName, oneRepMax),
             singleDayResults = listOf(SingleDayResult(LocalDate.now(), oneRepMax))
         )
         private val exerciseDetailPresentation = ExerciseDetailPresentation(
-            exerciseSummary = ExerciseSummaryView.Presentation(name = exerciseName, personalRecord = oneRepMax.toString()),
+            exerciseSummary = ExerciseSummaryView.Presentation(
+                exerciseId = exerciseId,
+                name = exerciseName,
+                personalRecord = oneRepMax.toString()
+            ),
             dataPoints = listOf(ChartView.DataPoint("Jul 3", 1f, 50f))
         )
     }
@@ -71,11 +75,11 @@ class ExerciseDetailViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(testCoroutineDispatcher)
 
-        coEvery { exerciseRepository.getSingleExerciseDetail(exerciseName) } returns exerciseWithStats
+        coEvery { exerciseRepository.getSingleExerciseDetail(exerciseId) } returns exerciseWithStats
         every { presentationHelper.getExerciseDetail(exerciseWithStats) } returns exerciseDetailPresentation
         every { context.resources } returns resources
-        every { resources.getString(R.string.key_exercise_name) } returns exerciseNameKey
-        every { savedStateHandle.get<String>(exerciseNameKey) } returns exerciseName
+        every { resources.getString(R.string.key_exercise_id) } returns exerciseIdKey
+        every { savedStateHandle.get<String>(exerciseIdKey) } returns exerciseId
 
         // Construct view model after mocking its dependencies because it performs work in its init block
         exerciseDetailViewModel = ExerciseDetailViewModel(context, savedStateHandle, exerciseRepository, presentationHelper)
@@ -94,9 +98,9 @@ class ExerciseDetailViewModelTest {
     fun fetchSingleExerciseData() = runBlocking {
         // verify calls made from the view model init block upon construction
         verify { context.resources }
-        verify { resources.getString(R.string.key_exercise_name) }
-        verify { savedStateHandle.get<String>(exerciseNameKey) }
-        coVerify { exerciseRepository.getSingleExerciseDetail(exerciseName) }
+        verify { resources.getString(R.string.key_exercise_id) }
+        verify { savedStateHandle.get<String>(exerciseIdKey) }
+        coVerify { exerciseRepository.getSingleExerciseDetail(exerciseId) }
         verify { presentationHelper.getExerciseDetail(exerciseWithStats) }
         assertEquals(exerciseDetailPresentation, observedExerciseDetailPresentation)
     }
