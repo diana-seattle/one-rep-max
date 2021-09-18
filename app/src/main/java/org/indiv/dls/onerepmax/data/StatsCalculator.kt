@@ -24,7 +24,7 @@ class StatsCalculator @Inject constructor() {
         }
     }
 
-    private fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>
+    fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>
     ): ExerciseWithFullDetail {
         val dayWithCalculatedStatsRecords = records.groupBy { it.dateOfWorkout }.map {
             calculateSingleDay(date = it.key, singleDayRecords = it.value)

@@ -48,7 +48,7 @@ data class ExerciseDay(
  * Exercise Day Entry table - represents one entry on one day of one exercise
  */
 @Entity(
-    tableName = "exercise_entry",
+    tableName = "exercise_day_entry",
     foreignKeys = [ForeignKey(
         entity = ExerciseDay::class,
         parentColumns = ["id"],

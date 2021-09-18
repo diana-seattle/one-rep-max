@@ -2,6 +2,7 @@ package org.indiv.dls.onerepmax.data
 
 import org.indiv.dls.onerepmax.data.db.Exercise
 import org.indiv.dls.onerepmax.data.db.ExerciseDao
+import org.indiv.dls.onerepmax.data.db.ExerciseDatabase
 import org.indiv.dls.onerepmax.data.db.ExerciseDay
 import org.indiv.dls.onerepmax.data.db.ExerciseDayDao
 import org.indiv.dls.onerepmax.data.db.ExerciseDayEntry
@@ -10,12 +11,14 @@ import org.indiv.dls.onerepmax.data.db.ExerciseWithDays
 import org.indiv.dls.onerepmax.data.db.IdGenerator
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.roundToInt
 
 @Singleton
 class ExerciseRepository @Inject constructor(
     private val sharedPrefsHelper: SharedPrefsHelper,
     private val statsFileReader: StatsFileReader,
     private val statsCalculator: StatsCalculator,
+    private val exerciseDatabase: ExerciseDatabase,
     private val exerciseDao: ExerciseDao,
     private val exerciseDayDao: ExerciseDayDao,
     private val exerciseDayEntryDao: ExerciseDayEntryDao,
@@ -40,13 +43,15 @@ class ExerciseRepository @Inject constructor(
 
 
     suspend fun getExerciseSummaries(): List<ExerciseSummary> {
-
-        // TODO decide how to handle updated data file
-
         return fetchExerciseSummaries().takeIf { it.isNotEmpty() } ?: run {
             persistAll(loadFromFile())
             fetchExerciseSummaries()
         }
+    }
+
+    suspend fun resetToFile() {
+        exerciseDatabase.clearAllTables()
+        persistAll(loadFromFile())
     }
 
     suspend fun getSingleExerciseDetail(exerciseId: String): ExerciseWithStats? {
@@ -59,6 +64,51 @@ class ExerciseRepository @Inject constructor(
                 ),
                 singleDayResults = convertToSingleDayResults(it)
             )
+        }
+    }
+
+    suspend fun addStatsRecord(statsRecord: StatsRecord) {
+        val exercise = exerciseDao.getExercise(statsRecord.exerciseName)
+        val candidate = statsCalculator.calculateSingleExercise(statsRecord.exerciseName,
+            listOf(statsRecord))
+        if (exercise != null) {
+            val exerciseDay = exerciseDayDao.getExerciseDay(exercise.id, statsRecord.dateOfWorkout)
+            val candidateExerciseDay = candidate.daysWithFullDetail.first()
+            if (exerciseDay != null) {
+                // Persist only the new entry
+                candidateExerciseDay.calculatedStatsRecords.forEach {
+                    persistExerciseDayEntry(exerciseDay.id, it.statsRecord, it.oneRepMax)
+                }
+
+                // Update the day aggregate value
+                val oneRepMaxAverageForDay = exerciseDayEntryDao.getAverageOneRepMax(exerciseDay.id)
+                    .roundToInt()
+                exerciseDayDao.update(exerciseDay.copy(oneRepMax = oneRepMaxAverageForDay))
+
+                // Update the exercise aggregate value if needed
+                if (oneRepMaxAverageForDay > exerciseDay.oneRepMax) {
+                    updateExerciseIfExceeded(oneRepMaxAverageForDay, exercise)
+                } else if (oneRepMaxAverageForDay < exerciseDay.oneRepMax
+                    && exercise.bestOneRepMax == exerciseDay.oneRepMax) {
+                    // The personal record was depending on the current day whose value just went down
+                    exerciseDao.update(exercise.copy(
+                        bestOneRepMax = exerciseDayDao.getBestOneRepMax(exercise.id))
+                    )
+                }
+            } else {
+                // Persist the new day and entry, and update the exercise personal best if exceeded
+                persistExerciseDay(exercise.id, candidateExerciseDay)
+                updateExerciseIfExceeded(candidate.oneRepMaxPersonalRecord.toInt(), exercise)
+            }
+        } else {
+            // All new exercise, so just persist it all
+            persistExercise(candidate)
+        }
+    }
+
+    private suspend fun updateExerciseIfExceeded(candidateBest: Int, exercise: Exercise) {
+        if (candidateBest > exercise.bestOneRepMax) {
+            exerciseDao.update(exercise.copy(bestOneRepMax = candidateBest))
         }
     }
 

@@ -9,4 +9,7 @@ import androidx.room.Transaction
 interface ExerciseDayEntryDao {
     @Insert
     suspend fun insert(exerciseDayEntry: ExerciseDayEntry)
+
+    @Query("SELECT sum(num_sets * one_rep_max) / sum(num_sets) FROM exercise_day_entry where exercise_day_id = :exerciseDayId")
+    suspend fun getAverageOneRepMax(exerciseDayId: String): Double
 }
