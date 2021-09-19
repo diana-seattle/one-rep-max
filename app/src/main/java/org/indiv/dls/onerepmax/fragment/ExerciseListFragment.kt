@@ -37,6 +37,11 @@ class ExerciseListFragment : Fragment() {
         setupErrorHandling()
     }
 
+    override fun onResume() {
+        super.onResume()
+        exerciseListViewModel.fetchExerciseListData()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

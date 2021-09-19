@@ -5,6 +5,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +54,7 @@ class ExerciseListViewModelTest {
     @MockK lateinit var exerciseRepository: ExerciseRepository
     @MockK lateinit var presentationHelper: PresentationHelper
 
-    lateinit var exerciseListViewModel: ExerciseListViewModel
+    @InjectMockKs lateinit var exerciseListViewModel: ExerciseListViewModel
 
     private var observedExerciseSummaryPresentations: List<ExerciseSummaryView.Presentation>? = null
 
@@ -65,9 +66,6 @@ class ExerciseListViewModelTest {
 
         coEvery { exerciseRepository.getExerciseSummaries() } returns exerciseSummaries
         every { presentationHelper.getExercises(exerciseSummaries) } returns exerciseSummaryPresentations
-
-        // Construct view model after mocking its dependencies because it performs work in its init block
-        exerciseListViewModel = ExerciseListViewModel(exerciseRepository, presentationHelper)
 
         exerciseListViewModel.exerciseListLiveData.observeForever { observedExerciseSummaryPresentations = it }
     }
@@ -81,7 +79,8 @@ class ExerciseListViewModelTest {
 
     @Test
     fun fetchExerciseListData() = runBlocking {
-        // verify calls made from the view model init block upon construction
+        exerciseListViewModel.fetchExerciseListData()
+
         assertEquals(exerciseSummaryPresentations, observedExerciseSummaryPresentations)
         coVerify { exerciseRepository.getExerciseSummaries() }
         verify { presentationHelper.getExercises(exerciseSummaries) }
