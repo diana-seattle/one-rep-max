@@ -13,7 +13,7 @@ interface ExerciseDayDao {
     suspend fun getExerciseDay(exerciseId: String, dateOfWorkout: LocalDate): ExerciseDay?
 
     @Query("SELECT max(one_rep_max) FROM exercise_day WHERE exercise_id = :exerciseId")
-    suspend fun getBestOneRepMax(exerciseId: String): Int
+    suspend fun getBestOneRepMax(exerciseId: String): Int?
 
     @Transaction
     @Query("SELECT * FROM exercise_day WHERE id = :id")

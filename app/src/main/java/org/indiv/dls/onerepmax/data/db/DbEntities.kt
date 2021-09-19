@@ -82,5 +82,5 @@ data class ExerciseDayWithEntries(
         parentColumn = "id",
         entityColumn = "exercise_day_id"
     )
-    val days: List<ExerciseDayEntry>
+    val entries: List<ExerciseDayEntry>
 )

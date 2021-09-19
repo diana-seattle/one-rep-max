@@ -82,7 +82,7 @@ class ExerciseRepository @Inject constructor(
 
                 // Update the day aggregate value
                 val oneRepMaxAverageForDay = exerciseDayEntryDao.getAverageOneRepMax(exerciseDay.id)
-                    .roundToInt()
+                    ?.roundToInt() ?: 0
                 exerciseDayDao.update(exerciseDay.copy(oneRepMax = oneRepMaxAverageForDay))
 
                 // Update the exercise aggregate value if needed
@@ -92,7 +92,7 @@ class ExerciseRepository @Inject constructor(
                     && exercise.bestOneRepMax == exerciseDay.oneRepMax) {
                     // The personal record was depending on the current day whose value just went down
                     exerciseDao.update(exercise.copy(
-                        bestOneRepMax = exerciseDayDao.getBestOneRepMax(exercise.id))
+                        bestOneRepMax = exerciseDayDao.getBestOneRepMax(exercise.id) ?: 0)
                     )
                 }
             } else {

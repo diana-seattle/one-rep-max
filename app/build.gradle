@@ -51,11 +51,12 @@ dependencies {
 
     // Workaround for bug in Sqlite on Apple M1 chip: https://issuetracker.google.com/issues/174695268?pli=1#comment9
     // Can be removed once Room 2.4.0 is available
-    kapt("org.xerial:sqlite-jdbc:3.34.0")
+    kapt("org.xerial:sqlite-jdbc:3.36.0")
 
     def room_version = "2.3.0"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    androidTestImplementation "androidx.room:room-testing:$room_version" // for db migration testing
 
     def hilt_version = "2.38.1"
     implementation "com.google.dagger:hilt-android:$hilt_version"
