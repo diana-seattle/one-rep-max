@@ -96,7 +96,8 @@ class ExerciseDetailViewModelTest {
 
     @Test
     fun fetchSingleExerciseData() = runBlocking {
-        // verify calls made from the view model init block upon construction
+        exerciseDetailViewModel.fetchSingleExerciseData()
+
         verify { context.resources }
         verify { resources.getString(R.string.key_exercise_id) }
         verify { savedStateHandle.get<String>(exerciseIdKey) }

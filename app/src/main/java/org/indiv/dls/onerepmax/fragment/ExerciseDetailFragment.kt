@@ -36,6 +36,11 @@ class ExerciseDetailFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        exerciseDetailViewModel.fetchSingleExerciseData()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
