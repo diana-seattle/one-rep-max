@@ -104,6 +104,29 @@ class StatsCalculatorTest {
         }
     }
 
+    @Test
+    fun calculateSingleExercise_multipleDays() = runBlocking {
+        val records = listOf(
+            createStatsRecord().copy(dateOfWorkout = day1, sets = 1u, reps = 4u, weight = 40u),
+            createStatsRecord().copy(dateOfWorkout = day1, sets = 2u, reps = 8u, weight = 20u),
+            createStatsRecord().copy(dateOfWorkout = day2, sets = 1u, reps = 5u, weight = 25u)
+        )
+
+        val exerciseResult = statsCalculator.calculateSingleExercise(records[0].exerciseName, records)
+
+        assertEquals(2, exerciseResult.daysWithFullDetail.size) // 2 days
+        assertEquals(31u, exerciseResult.oneRepMaxPersonalRecord)
+        val day1Result = exerciseResult.daysWithFullDetail[0]
+        val day2Result = exerciseResult.daysWithFullDetail[1]
+        assertEquals(31u, day1Result.oneRepMax)
+        assertEquals(28u, day2Result.oneRepMax)
+        assertEquals(day1, day1Result.date)
+        assertEquals(day2, day2Result.date)
+        assertEquals(2, day1Result.calculatedStatsRecords.size)
+        assertEquals(1, day2Result.calculatedStatsRecords.size)
+        assertEquals(28, day2Result.calculatedStatsRecords[0].oneRepMax.roundToInt())
+    }
+
     private fun createStatsRecord(
         dateOfWorkout: LocalDate = LocalDate.now(),
         exerciseName: String = "Test Exercise",

@@ -24,16 +24,18 @@ class StatsCalculator @Inject constructor() {
         }
     }
 
-    fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>
+    suspend fun calculateSingleExercise(exerciseName: String, records: List<StatsRecord>
     ): ExerciseWithFullDetail {
-        val dayWithCalculatedStatsRecords = records.groupBy { it.dateOfWorkout }.map {
-            calculateSingleDay(date = it.key, singleDayRecords = it.value)
+        return withContext(Dispatchers.Default) {
+            val dayWithCalculatedStatsRecords = records.groupBy { it.dateOfWorkout }.map {
+                calculateSingleDay(date = it.key, singleDayRecords = it.value)
+            }
+            ExerciseWithFullDetail(
+                exerciseName = exerciseName,
+                oneRepMaxPersonalRecord = dayWithCalculatedStatsRecords.maxOf { it.oneRepMax },
+                daysWithFullDetail = dayWithCalculatedStatsRecords
+            )
         }
-        return ExerciseWithFullDetail(
-            exerciseName = exerciseName,
-            oneRepMaxPersonalRecord = dayWithCalculatedStatsRecords.maxOf { it.oneRepMax },
-            daysWithFullDetail = dayWithCalculatedStatsRecords
-        )
     }
 
     private fun calculateSingleDay(date: LocalDate, singleDayRecords: List<StatsRecord>

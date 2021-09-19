@@ -80,7 +80,7 @@ class ExerciseRepository @Inject constructor(
                     persistExerciseDayEntry(exerciseDay.id, it.statsRecord, it.oneRepMax)
                 }
 
-                // Update the day aggregate value
+                // Update the day's average value
                 val oneRepMaxAverageForDay = exerciseDayEntryDao.getAverageOneRepMax(exerciseDay.id)
                     ?.roundToInt() ?: 0
                 exerciseDayDao.update(exerciseDay.copy(oneRepMax = oneRepMaxAverageForDay))
