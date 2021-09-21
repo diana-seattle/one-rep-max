@@ -1,5 +1,9 @@
 package org.indiv.dls.onerepmax.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.indiv.dls.onerepmax.data.db.Exercise
 import org.indiv.dls.onerepmax.data.db.ExerciseDao
 import org.indiv.dls.onerepmax.data.db.ExerciseDatabase
@@ -24,6 +28,10 @@ class ExerciseRepository @Inject constructor(
     private val exerciseDayEntryDao: ExerciseDayEntryDao,
     private val idGenerator: IdGenerator
 ) {
+    // Boolean represent whether top-level exercise updated
+    private val _dataChangeLiveData = MutableLiveData<Boolean>()
+    val dataChangeLiveData: LiveData<Boolean> = _dataChangeLiveData
+
     fun isDarkModeInSettings(): Boolean {
         return sharedPrefsHelper.isDarkMode()
     }
@@ -31,16 +39,6 @@ class ExerciseRepository @Inject constructor(
     fun persistDarkMode(dark: Boolean) {
         sharedPrefsHelper.persistDarkMode(dark)
     }
-
-
-
-
-    // TODO add tests for persistence, move persistence out of this class?
-    // TODO add ability to add new records from UI
-    // TODO update exercise list with new insertions
-
-
-
 
     suspend fun getExerciseSummaries(): List<ExerciseSummary> {
         return fetchExerciseSummaries().takeIf { it.isNotEmpty() } ?: run {
@@ -50,8 +48,11 @@ class ExerciseRepository @Inject constructor(
     }
 
     suspend fun resetToFile() {
-        exerciseDatabase.clearAllTables()
+        withContext(Dispatchers.IO) {
+            exerciseDatabase.clearAllTables()
+        }
         persistAll(loadFromFile())
+        _dataChangeLiveData.postValue(true)
     }
 
     suspend fun getSingleExerciseDetail(exerciseId: String): ExerciseWithStats? {
@@ -86,7 +87,7 @@ class ExerciseRepository @Inject constructor(
                 exerciseDayDao.update(exerciseDay.copy(oneRepMax = oneRepMaxAverageForDay))
 
                 // Update the exercise aggregate value if needed
-                if (oneRepMaxAverageForDay > exerciseDay.oneRepMax) {
+                val topLevelUpdated = if (oneRepMaxAverageForDay > exerciseDay.oneRepMax) {
                     updateExerciseIfExceeded(oneRepMaxAverageForDay, exercise)
                 } else if (oneRepMaxAverageForDay < exerciseDay.oneRepMax
                     && exercise.bestOneRepMax == exerciseDay.oneRepMax) {
@@ -94,22 +95,29 @@ class ExerciseRepository @Inject constructor(
                     exerciseDao.update(exercise.copy(
                         bestOneRepMax = exerciseDayDao.getBestOneRepMax(exercise.id) ?: 0)
                     )
-                }
+                    true
+                } else false
+                _dataChangeLiveData.postValue(topLevelUpdated)
             } else {
                 // Persist the new day and entry, and update the exercise personal best if exceeded
                 persistExerciseDay(exercise.id, candidateExerciseDay)
-                updateExerciseIfExceeded(candidate.oneRepMaxPersonalRecord.toInt(), exercise)
+                val topLevelUpdated = updateExerciseIfExceeded(
+                    candidate.oneRepMaxPersonalRecord.toInt(), exercise)
+                _dataChangeLiveData.postValue(topLevelUpdated)
             }
         } else {
-            // All new exercise, so just persist it all
+            // All new exercise, so persist it all
             persistExercise(candidate)
+            _dataChangeLiveData.postValue(true)
         }
     }
 
-    private suspend fun updateExerciseIfExceeded(candidateBest: Int, exercise: Exercise) {
+    private suspend fun updateExerciseIfExceeded(candidateBest: Int, exercise: Exercise): Boolean {
         if (candidateBest > exercise.bestOneRepMax) {
             exerciseDao.update(exercise.copy(bestOneRepMax = candidateBest))
+            return true
         }
+        return false
     }
 
     private fun convertToSingleDayResults(it: ExerciseWithDays): List<SingleDayResult> {

@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.indiv.dls.onerepmax.R
 import org.indiv.dls.onerepmax.databinding.ActivityMainBinding
+import org.indiv.dls.onerepmax.dialog.DataInputDialog
 import org.indiv.dls.onerepmax.viewmodel.MainActivityViewModel
 
 @AndroidEntryPoint
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        binding.fab.setOnClickListener {
+            DataInputDialog().show(supportFragmentManager, "fragment_addRecord")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

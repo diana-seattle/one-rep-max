@@ -19,6 +19,7 @@ Example app that displays one-repetition max (1 RM) info based on workout data.
 * Jetpack Navigation
 * Kotlin coroutines
 * Room
+* Jetpack Compose
 * Unit tests with MockK
 * Themes/styles
 * Coordinator and Constraint layouts

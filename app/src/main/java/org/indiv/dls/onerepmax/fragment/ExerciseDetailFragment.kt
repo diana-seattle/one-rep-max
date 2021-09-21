@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.indiv.dls.onerepmax.databinding.FragmentExerciseDetailBinding
 import org.indiv.dls.onerepmax.R
+import org.indiv.dls.onerepmax.databinding.FragmentExerciseDetailBinding
 import org.indiv.dls.onerepmax.viewmodel.ExerciseDetailViewModel
 
 
@@ -29,20 +30,31 @@ class ExerciseDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupErrorHandling()
 
         exerciseDetailViewModel.exerciseDetailLiveData.observe(viewLifecycleOwner) { presentation ->
             binding.exerciseSummary.bindPresentation(presentation.exerciseSummary)
             binding.chart.setData(presentation.dataPoints)
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
+        // Fetch when view initially created and also when data may have changed
         exerciseDetailViewModel.fetchSingleExerciseData()
+        exerciseDetailViewModel.dataChangeLiveData.observe(viewLifecycleOwner) {
+            exerciseDetailViewModel.fetchSingleExerciseData()
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupErrorHandling() {
+        exerciseDetailViewModel.errorResultLiveData.observe(viewLifecycleOwner) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE).apply {
+                setAction(getString(R.string.button_text_ok)) { dismiss() }
+                show()
+            }
+        }
     }
 }

@@ -23,6 +23,9 @@ class ExerciseListViewModel @Inject constructor(
     private val _errorResultLiveData = MutableLiveData<String>()
     val errorResultLiveData: LiveData<String> = _errorResultLiveData
 
+    val dataChangeLiveData: LiveData<Boolean>
+        get() = exerciseRepository.dataChangeLiveData
+
     fun fetchExerciseListData() {
         // This creates a coroutine on the main thread. The file reader and calculator are "main-safe" in that
         // they will switch themselves to the appropriate thread.

@@ -35,11 +35,14 @@ class ExerciseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerViewAdapter()
         setupErrorHandling()
-    }
 
-    override fun onResume() {
-        super.onResume()
+        // Fetch when view initially created and also when data may have changed
         exerciseListViewModel.fetchExerciseListData()
+        exerciseListViewModel.dataChangeLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+                exerciseListViewModel.fetchExerciseListData()
+            }
+        }
     }
 
     override fun onDestroyView() {
